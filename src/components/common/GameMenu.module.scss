@@ -1,0 +1,320 @@
+// src/components/common/GameMenu.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.menu {
+  width: 240px;
+  height: 100%;
+  background-color: var(--color-background-primary);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  transition: width $transition-normal;
+  overflow: hidden;
+
+  &.collapsed {
+    width: 60px;
+  }
+}
+
+.menuHeader {
+  padding: $spacing-xs;
+  display: flex;
+  justify-content: flex-end;
+  border-bottom: 1px solid var(--color-border);
+
+  .collapseButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      background-color: var(--color-background-secondary);
+    }
+  }
+}
+
+.menuItems {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: $spacing-xs 0;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--color-primary-rgb), 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background-color: rgba(var(--color-primary-rgb), 0.5);
+    }
+  }
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm $spacing-md;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  position: relative;
+  transition: background-color $transition-fast;
+
+  &:hover {
+    background-color: var(--color-background-secondary);
+  }
+
+  &.active {
+    background-color: rgba(var(--color-primary-rgb), 0.1);
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background-color: var(--color-primary);
+    }
+
+    .menuLabel {
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+  }
+}
+
+.menuIcon {
+  font-size: 18px;
+  min-width: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menuContent {
+  flex: 1;
+  overflow: hidden;
+}
+
+.menuLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menuLabel {
+  font-size: $font-size-sm;
+  font-weight: 500;
+}
+
+.menuDescription {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menuBadge {
+  background-color: var(--color-accent);
+  color: white;
+  font-size: $font-size-xs;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.menuNotification {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  background-color: var(--color-background-secondary);
+  padding: $spacing-xs $spacing-sm;
+  border-radius: 4px;
+  margin-top: $spacing-xs;
+  display: flex;
+  align-items: center;
+  animation: pulse 2s infinite;
+
+  .notificationDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    margin-right: $spacing-xs;
+  }
+}
+
+.financialSummary {
+  padding: $spacing-md;
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-background-secondary);
+}
+
+.summaryItem {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $spacing-xs;
+
+  .summaryLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+  }
+
+  .summaryValue {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    font-family: $font-family-secondary;
+
+    &.profit {
+      color: var(--color-success);
+    }
+
+    &.loss {
+      color: var(--color-error);
+    }
+  }
+}
+
+.burnRateBar {
+  margin-top: $spacing-sm;
+
+  .burnRateLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+  }
+
+  .burnRateTrack {
+    height: 6px;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .burnRateFill {
+    height: 100%;
+    transition: width $transition-normal, background-color $transition-normal;
+  }
+}
+
+// Keyframe animations
+@keyframes pulse {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-lg) {
+  .menu {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+
+    &.collapsed {
+      height: 40px;
+    }
+  }
+
+  .menuHeader {
+    border-bottom: none;
+
+    .collapseButton {
+      transform: rotate(90deg);
+    }
+  }
+
+  .menuItems {
+    flex-direction: row;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding: $spacing-xs;
+
+    &.collapsed {
+      display: none;
+    }
+  }
+
+  .menuItem {
+    flex-direction: column;
+    padding: $spacing-sm;
+    text-align: center;
+    flex: 1;
+    min-width: 80px;
+
+    &.active {
+      &::before {
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: auto;
+        width: auto;
+        height: 3px;
+      }
+    }
+  }
+
+  .menuIcon {
+    margin-bottom: $spacing-xs;
+  }
+
+  .menuContent {
+    text-align: center;
+  }
+
+  .menuLabelRow {
+    justify-content: center;
+  }
+
+  .menuBadge {
+    position: absolute;
+    top: $spacing-xs;
+    right: $spacing-xs;
+  }
+
+  .menuDescription {
+    display: none;
+  }
+
+  .menuNotification {
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+  }
+
+  .financialSummary {
+    display: none;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .menuItems {
+    justify-content: space-around;
+  }
+
+  .menuItem {
+    min-width: auto;
+  }
+}

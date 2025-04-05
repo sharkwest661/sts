@@ -1,0 +1,125 @@
+// src/components/dashboard/Dashboard.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.dashboardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid var(--color-border);
+
+  .greeting {
+    h1 {
+      font-size: $font-size-2xl;
+      margin-bottom: $spacing-xs;
+      color: var(--color-text-primary);
+
+      background: linear-gradient(
+        45deg,
+        var(--color-primary),
+        var(--color-secondary)
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      // text-fill-color: transparent;
+    }
+
+    .headerTagline {
+      color: var(--color-text-secondary);
+      margin: 0;
+    }
+
+    .companyHighlight {
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+  }
+
+  .valuationDisplay {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    .valuationLabel {
+      font-size: $font-size-sm;
+      color: var(--color-text-secondary);
+      margin-bottom: $spacing-xs;
+    }
+
+    .valuationAmount {
+      font-size: $font-size-xl;
+      font-weight: 700;
+      font-family: $font-family-secondary;
+      color: var(--color-primary);
+    }
+  }
+}
+
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto auto;
+  gap: $spacing-md;
+  flex: 1;
+
+  & > div {
+    background-color: var(--color-background-primary);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: $spacing-md;
+    overflow: hidden;
+    transition: transform $transition-fast, box-shadow $transition-fast;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  // Widget positioning - responsive by default, larger screens get specific layout
+  @media (min-width: $breakpoint-lg) {
+    // Metrics widget takes double width
+    & > div:nth-child(1) {
+      grid-column: span 2;
+    }
+
+    // Financial widget spans across
+    & > div:nth-child(4) {
+      grid-column: span 3;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-lg) {
+  .dashboardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .dashboardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .valuationDisplay {
+      margin-top: $spacing-md;
+      align-items: flex-start;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .dashboardGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,185 @@
+// src/components/dashboard/widgets/MetricsWidget.module.scss
+@import "../../../styles/abstracts/variables";
+@import "../../../styles/abstracts/mixins";
+
+.metricsWidget {
+  display: flex;
+  flex-direction: column;
+}
+
+.widgetTitle {
+  font-size: $font-size-lg;
+  margin-top: 0;
+  margin-bottom: $spacing-md;
+  color: var(--color-text-primary);
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 40px;
+    height: 3px;
+    background-color: var(--color-primary);
+    border-radius: 2px;
+  }
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.metricItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm;
+  background-color: var(--color-background-secondary);
+  border-radius: 6px;
+  transition: transform $transition-fast;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.metricIcon {
+  font-size: 20px;
+  margin-right: $spacing-sm;
+}
+
+.metricContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.metricLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  margin-bottom: 2px;
+}
+
+.metricValue {
+  font-family: $font-family-secondary;
+  font-size: $font-size-sm;
+  font-weight: 600;
+
+  &.positive {
+    color: var(--color-success);
+  }
+
+  &.negative {
+    color: var(--color-error);
+  }
+}
+
+.sectionTitle {
+  font-size: $font-size-md;
+  margin: 0 0 $spacing-sm 0;
+  color: var(--color-text-primary);
+}
+
+.reputationSection {
+  margin-bottom: $spacing-lg;
+}
+
+.reputationGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+}
+
+.reputationItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.reputationLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  margin-bottom: 4px;
+}
+
+.reputationBarContainer {
+  height: 6px;
+  background-color: var(--color-background-secondary);
+  border-radius: 3px;
+  margin-bottom: 4px;
+  overflow: hidden;
+}
+
+.reputationBar {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 3px;
+  transition: width $transition-normal;
+}
+
+.reputationValue {
+  font-size: $font-size-xs;
+  font-family: $font-family-secondary;
+  color: var(--color-text-primary);
+  align-self: flex-end;
+}
+
+.burnRateIndicator {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  padding-top: $spacing-md;
+  border-top: 1px solid var(--color-border);
+}
+
+.burnRateLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  margin-right: $spacing-sm;
+}
+
+.burnRateTrack {
+  flex: 1;
+  height: 6px;
+  background-color: var(--color-background-secondary);
+  border-radius: 3px;
+  margin: 0 $spacing-sm;
+  overflow: hidden;
+}
+
+.burnRateFill {
+  height: 100%;
+  background-color: var(--color-error);
+  border-radius: 3px;
+  transition: width $transition-normal, background-color $transition-normal;
+
+  &.profitable {
+    background-color: var(--color-success);
+  }
+}
+
+.burnRateValue {
+  font-size: $font-size-xs;
+  font-family: $font-family-secondary;
+  color: var(--color-text-primary);
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-md) {
+  .metricsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .reputationGrid {
+    grid-template-columns: 1fr;
+    gap: $spacing-sm;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-sm;
+  }
+}

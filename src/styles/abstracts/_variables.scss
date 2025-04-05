@@ -1,0 +1,92 @@
+// _variables.scss - Core variables
+
+// Colors - Primary palette
+$color-primary: #4a90e2;
+$color-secondary: #50e3c2;
+$color-accent: #f5a623;
+$color-error: #e54d42;
+$color-success: #7ed321;
+$color-warning: #f5a623;
+
+// Colors - Neutral
+$color-text-primary: #333333;
+$color-text-secondary: #666666;
+$color-text-tertiary: #999999;
+$color-background-primary: #ffffff;
+$color-background-secondary: #f5f5f5;
+$color-border: #e0e0e0;
+
+// Typography
+$font-family-primary: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+$font-family-secondary: "Roboto Mono", monospace;
+
+$font-size-xs: 0.75rem; // 12px
+$font-size-sm: 0.875rem; // 14px
+$font-size-md: 1rem; // 16px
+$font-size-lg: 1.125rem; // 18px
+$font-size-xl: 1.25rem; // 20px
+$font-size-2xl: 1.5rem; // 24px
+$font-size-3xl: 2rem; // 32px
+
+// Spacing
+$spacing-xs: 0.25rem; // 4px
+$spacing-sm: 0.5rem; // 8px
+$spacing-md: 1rem; // 16px
+$spacing-lg: 1.5rem; // 24px
+$spacing-xl: 2rem; // 32px
+$spacing-2xl: 3rem; // 48px
+
+// Animations
+$transition-fast: 0.15s ease-in-out;
+$transition-normal: 0.3s ease-in-out;
+$transition-slow: 0.5s ease-in-out;
+
+// Z-indices
+$z-index-dropdown: 100;
+$z-index-modal: 200;
+$z-index-tooltip: 300;
+$z-index-notification: 400;
+
+// Breakpoints
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+
+// Game-specific variables
+$intern-morale-high: $color-success;
+$intern-morale-medium: $color-warning;
+$intern-morale-low: $color-error;
+
+$product-quality-high: $color-success;
+$product-quality-medium: $color-warning;
+$product-quality-low: $color-error;
+
+$investor-satisfied: $color-success;
+$investor-concerned: $color-warning;
+$investor-angry: $color-error;
+
+// Office progression
+$office-tier1-bg: #f0f0f0;
+$office-tier2-bg: #e5e5e5;
+$office-tier3-bg: #d8d8d8;
+$office-tier4-bg: #cccccc;
+
+// Convert variables to CSS custom properties for theme switching
+:root {
+  --color-primary: #{$color-primary};
+  --color-secondary: #{$color-secondary};
+  --color-accent: #{$color-accent};
+  --color-error: #{$color-error};
+  --color-success: #{$color-success};
+  --color-warning: #{$color-warning};
+
+  --color-text-primary: #{$color-text-primary};
+  --color-text-secondary: #{$color-text-secondary};
+  --color-text-tertiary: #{$color-text-tertiary};
+  --color-background-primary: #{$color-background-primary};
+  --color-background-secondary: #{$color-background-secondary};
+  --color-border: #{$color-border};
+
+  // Additional CSS custom properties...
+}

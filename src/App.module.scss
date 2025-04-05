@@ -1,0 +1,303 @@
+// src/App.module.scss
+@import "./styles/abstracts/variables";
+@import "./styles/abstracts/mixins";
+
+// App container - takes full viewport
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+  transition: background-color $transition-normal, color $transition-normal;
+  overflow: hidden;
+
+  // Theme variations
+  &.light {
+    // Light theme styles (default in _variables.scss)
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f5f5;
+    --color-text-primary: #333333;
+    --color-text-secondary: #666666;
+    --color-border: #e0e0e0;
+
+    // Convert color values to RGB for opacity operations
+    --color-primary-rgb: 74, 144, 226;
+    --color-secondary-rgb: 80, 227, 194;
+  }
+
+  &.dark {
+    // Dark theme styles
+    --color-background-primary: #1e1e1e;
+    --color-background-secondary: #2d2d2d;
+    --color-text-primary: #e0e0e0;
+    --color-text-secondary: #b0b0b0;
+    --color-border: #444444;
+
+    // Slightly adjusted colors for dark theme
+    --color-primary: #5a9fef;
+    --color-secondary: #60f3d2;
+    --color-accent: #ffb133;
+    --color-error: #ff5d52;
+    --color-success: #8ee331;
+    --color-warning: #ffb133;
+
+    // RGB values for dark theme
+    --color-primary-rgb: 90, 159, 239;
+    --color-secondary-rgb: 96, 243, 210;
+
+    // Office tier backgrounds (darker for dark theme)
+    --office-tier1-bg: #252525;
+    --office-tier2-bg: #2a2a2a;
+    --office-tier3-bg: #303030;
+    --office-tier4-bg: #353535;
+  }
+}
+
+// Game layout (after game has started)
+.gameLayout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+// Main content area
+.mainContent {
+  flex: 1;
+  padding: $spacing-lg;
+  overflow-y: auto;
+
+  // Subtle background pattern for the main content
+  background-image: radial-gradient(
+      circle at 100% 100%,
+      var(--color-background-secondary) 0,
+      transparent 60px
+    ),
+    radial-gradient(
+      circle at 0% 0%,
+      var(--color-background-secondary) 0,
+      transparent 60px
+    );
+
+  // Improve scrollbar appearance
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-background-secondary);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--color-primary-rgb), 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background-color: rgba(var(--color-primary-rgb), 0.5);
+    }
+  }
+}
+
+// Intro container (startup selector)
+.introContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-image: linear-gradient(
+    135deg,
+    var(--color-background-primary) 0%,
+    var(--color-background-secondary) 100%
+  );
+
+  // Add some texture
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%234a90e2' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+    opacity: 0.5;
+    z-index: 0;
+  }
+
+  & > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// Custom tooltip style
+:global {
+  .tooltip {
+    position: absolute;
+    padding: $spacing-xs $spacing-sm;
+    background-color: var(--color-text-primary);
+    color: var(--color-background-primary);
+    border-radius: 4px;
+    font-size: $font-size-xs;
+    font-weight: 500;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(8px);
+    z-index: $z-index-tooltip;
+    transition: opacity $transition-fast, transform $transition-fast;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+    &.visible {
+      opacity: 0.9;
+      transform: translateY(0);
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--color-text-primary) transparent transparent
+        transparent;
+    }
+  }
+}
+
+// Loading overlay animation
+.loadingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-background-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $z-index-modal + 10;
+  flex-direction: column;
+
+  .loadingLogo {
+    font-size: $font-size-3xl;
+    margin-bottom: $spacing-lg;
+    animation: pulse 2s infinite;
+  }
+
+  .loadingText {
+    font-family: $font-family-secondary;
+    font-size: $font-size-lg;
+    color: var(--color-text-secondary);
+  }
+}
+
+// Notification area
+.notifications {
+  position: fixed;
+  bottom: $spacing-md;
+  right: $spacing-md;
+  z-index: $z-index-notification;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  max-width: 350px;
+  pointer-events: none;
+
+  .notification {
+    padding: $spacing-sm $spacing-md;
+    background-color: var(--color-background-primary);
+    border-left: 4px solid var(--color-primary);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    pointer-events: all;
+    animation: slideIn 0.3s ease-out;
+
+    &.success {
+      border-left-color: var(--color-success);
+    }
+
+    &.error {
+      border-left-color: var(--color-error);
+    }
+
+    &.warning {
+      border-left-color: var(--color-warning);
+    }
+
+    .notificationTitle {
+      font-weight: 600;
+      margin-bottom: $spacing-xs;
+    }
+
+    .notificationBody {
+      font-size: $font-size-sm;
+      color: var(--color-text-secondary);
+    }
+
+    .notificationClose {
+      position: absolute;
+      top: $spacing-xs;
+      right: $spacing-xs;
+      cursor: pointer;
+      opacity: 0.5;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// Keyframe animations
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Responsive styles
+@media (max-width: $breakpoint-lg) {
+  .gameLayout {
+    flex-direction: column;
+  }
+
+  .mainContent {
+    padding: $spacing-md;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .mainContent {
+    padding: $spacing-sm;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .notifications {
+    left: $spacing-sm;
+    right: $spacing-sm;
+    max-width: none;
+  }
+}

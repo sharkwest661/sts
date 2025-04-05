@@ -1,0 +1,226 @@
+// src/components/dashboard/widgets/TasksWidget.module.scss
+@import "../../../styles/abstracts/variables";
+@import "../../../styles/abstracts/mixins";
+
+.tasksWidget {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.widgetTitle {
+  font-size: $font-size-lg;
+  margin-top: 0;
+  margin-bottom: $spacing-md;
+  color: var(--color-text-primary);
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 40px;
+    height: 3px;
+    background-color: var(--color-primary);
+    border-radius: 2px;
+  }
+}
+
+.emptyState {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+
+  .emptyIcon {
+    font-size: 32px;
+    margin-bottom: $spacing-sm;
+    opacity: 0.5;
+  }
+
+  .emptyText {
+    font-size: $font-size-sm;
+    margin: 0;
+  }
+}
+
+.tasksList {
+  flex: 1;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--color-primary-rgb), 0.3);
+    border-radius: 2px;
+  }
+}
+
+.taskItem {
+  display: flex;
+  align-items: flex-start;
+  padding: $spacing-sm;
+  border-radius: 6px;
+  background-color: var(--color-background-secondary);
+  margin-bottom: $spacing-sm;
+  transition: transform $transition-fast, background-color $transition-fast;
+  border-left: 3px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &.critical {
+    border-left-color: var(--color-error);
+  }
+
+  &.high {
+    border-left-color: var(--color-warning);
+  }
+
+  &.medium {
+    border-left-color: var(--color-primary);
+  }
+
+  &.low {
+    border-left-color: var(--color-success);
+  }
+
+  &.completed {
+    opacity: 0.6;
+
+    .taskTitle {
+      text-decoration: line-through;
+      color: var(--color-text-tertiary);
+    }
+  }
+}
+
+.taskCheckbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  margin-right: $spacing-sm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color $transition-fast, border-color $transition-fast;
+
+  &:hover {
+    border-color: var(--color-primary);
+  }
+
+  .completed & {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+  }
+}
+
+.taskContent {
+  flex: 1;
+}
+
+.taskHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-xs;
+}
+
+.taskTitle {
+  margin: 0;
+  font-size: $font-size-sm;
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.taskDeadline {
+  font-size: $font-size-xs;
+  color: var(--color-text-tertiary);
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 2px 6px;
+  border-radius: 10px;
+
+  .critical & {
+    color: var(--color-error);
+    font-weight: 600;
+  }
+}
+
+.taskFooter {
+  display: flex;
+  align-items: center;
+}
+
+.taskPriority {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+
+  .critical & {
+    color: var(--color-error);
+  }
+
+  .high & {
+    color: var(--color-warning);
+  }
+}
+
+.tasksFooter {
+  margin-top: $spacing-md;
+  padding-top: $spacing-sm;
+  border-top: 1px solid var(--color-border);
+}
+
+.tasksProgress {
+  margin-bottom: $spacing-sm;
+}
+
+.progressLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.progressBarContainer {
+  height: 4px;
+  background-color: var(--color-background-secondary);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background-color: var(--color-success);
+  border-radius: 2px;
+  transition: width $transition-normal;
+}
+
+.addTaskButton {
+  width: 100%;
+  padding: $spacing-sm;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: background-color $transition-fast, color $transition-fast;
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+}

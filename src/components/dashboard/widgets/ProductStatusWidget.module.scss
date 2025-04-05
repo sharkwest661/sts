@@ -1,0 +1,233 @@
+// src/components/dashboard/widgets/ProductStatusWidget.module.scss
+@import "../../../styles/abstracts/variables";
+@import "../../../styles/abstracts/mixins";
+
+.productWidget {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.widgetTitle {
+  font-size: $font-size-lg;
+  margin-top: 0;
+  margin-bottom: $spacing-md;
+  color: var(--color-text-primary);
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 40px;
+    height: 3px;
+    background-color: var(--color-primary);
+    border-radius: 2px;
+  }
+}
+
+.productHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+  padding-bottom: $spacing-sm;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.productName {
+  display: flex;
+  align-items: center;
+}
+
+.productIcon {
+  font-size: 20px;
+  margin-right: $spacing-sm;
+}
+
+.productTitle {
+  font-size: $font-size-md;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.versionBadge {
+  padding: $spacing-xs $spacing-sm;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 12px;
+  font-size: $font-size-xs;
+  font-weight: 600;
+  font-family: $font-family-secondary;
+}
+
+.developmentProgress {
+  margin-bottom: $spacing-md;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.progressLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+}
+
+.progressValue {
+  font-size: $font-size-xs;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.progressBarContainer {
+  height: 8px;
+  background-color: var(--color-background-secondary);
+  border-radius: 4px;
+  margin-bottom: $spacing-xs;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width $transition-normal;
+
+  &.initialStage {
+    background-color: #a0a0a0;
+  }
+
+  &.earlyStage {
+    background-color: var(--color-primary);
+  }
+
+  &.midStage {
+    background-color: var(--color-secondary);
+  }
+
+  &.lateStage {
+    background-color: var(--color-success);
+  }
+}
+
+.nextReleaseLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  font-style: italic;
+}
+
+.productStats {
+  display: flex;
+  margin-bottom: $spacing-md;
+}
+
+.statItem {
+  flex: 1;
+  padding: $spacing-sm;
+  background-color: var(--color-background-secondary);
+  border-radius: 6px;
+
+  &:not(:last-child) {
+    margin-right: $spacing-sm;
+  }
+}
+
+.statHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.statLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+}
+
+.statValue {
+  font-size: $font-size-md;
+  font-weight: 600;
+  color: var(--color-text-primary);
+
+  &.low {
+    color: var(--color-success);
+  }
+
+  &.medium {
+    color: var(--color-warning);
+  }
+
+  &.high {
+    color: var(--color-error);
+  }
+
+  &.critical {
+    color: var(--color-error);
+    animation: pulse 2s infinite;
+  }
+}
+
+.statDescription {
+  font-size: $font-size-xs;
+  color: var(--color-text-tertiary);
+}
+
+.sectionTitle {
+  font-size: $font-size-sm;
+  margin: 0 0 $spacing-sm 0;
+  color: var(--color-text-primary);
+}
+
+.techTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+}
+
+.techTag {
+  padding: $spacing-xs $spacing-sm;
+  background-color: rgba(var(--color-primary-rgb), 0.1);
+  color: var(--color-primary);
+  border-radius: 12px;
+  font-size: $font-size-xs;
+  font-family: $font-family-secondary;
+}
+
+.viewProductButton {
+  margin-top: auto;
+  padding: $spacing-sm $spacing-md;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color $transition-fast, transform $transition-fast;
+
+  &:hover {
+    background-color: darken(#4a90e2, 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// Pulse animation
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}

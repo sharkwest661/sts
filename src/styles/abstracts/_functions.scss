@@ -1,0 +1,122 @@
+// src/styles/abstracts/_functions.scss
+
+// Convert pixels to rem
+@function rem($px) {
+  $rem: $px / 16;
+  @return #{$rem}rem;
+}
+
+// Convert pixels to em
+@function em($px, $base: 16) {
+  $em: $px / $base;
+  @return #{$em}em;
+}
+
+// Lighten color by percentage
+@function tint($color, $percentage) {
+  @return mix(white, $color, $percentage);
+}
+
+// Darken color by percentage
+@function shade($color, $percentage) {
+  @return mix(black, $color, $percentage);
+}
+
+// Get a specific color from the palette
+@function color($key) {
+  @if map-has-key($colors, $key) {
+    @return map-get($colors, $key);
+  }
+
+  @warn "Unknown color key: #{$key}";
+  @return null;
+}
+
+// Calculate contrast ratio
+@function contrast-ratio($background, $foreground: white) {
+  $lum1: luminance($background);
+  $lum2: luminance($foreground);
+
+  @if $lum1 > $lum2 {
+    @return ($lum1 + 0.05) / ($lum2 + 0.05);
+  } @else {
+    @return ($lum2 + 0.05) / ($lum1 + 0.05);
+  }
+}
+
+// Calculate luminance
+@function luminance($color) {
+  $rgb: (
+    "red": red($color) / 255,
+    "green": green($color) / 255,
+    "blue": blue($color) / 255,
+  );
+
+  @each $name, $value in $rgb {
+    $value: if(
+      $value < 0.03928,
+      $value / 12.92,
+      pow(($value + 0.055) / 1.055, 2.4)
+    );
+    $rgb: map-merge(
+      $rgb,
+      (
+        $name: $value,
+      )
+    );
+  }
+
+  @return map-get($rgb, "red") * 0.2126 + map-get($rgb, "green") * 0.7152 +
+    map-get($rgb, "blue") * 0.0722;
+}
+
+// Power function (for luminance calculation)
+@function pow($base, $exponent) {
+  $result: 1;
+
+  @if $exponent > 0 {
+    @for $i from 1 through $exponent {
+      $result: $result * $base;
+    }
+  } @else if $exponent < 0 {
+    @for $i from 1 through -$exponent {
+      $result: $result / $base;
+    }
+  }
+
+  @return $result;
+}
+
+// Get contrast color (black or white) based on background
+@function contrast-color($background) {
+  @if contrast-ratio($background, black) > contrast-ratio($background, white) {
+    @return black;
+  } @else {
+    @return white;
+  }
+}
+
+// Get a specific spacing value
+@function spacing($key) {
+  @if map-has-key($spacing-values, $key) {
+    @return map-get($spacing-values, $key);
+  }
+
+  @warn "Unknown spacing key: #{$key}";
+  @return null;
+}
+
+// Z-index management
+@function z-index($key) {
+  @if map-has-key($z-indices, $key) {
+    @return map-get($z-indices, $key);
+  }
+
+  @warn "Unknown z-index key: #{$key}";
+  @return null;
+}
+
+// Convert hex to RGB for CSS variables
+@function hex-to-rgb($hex) {
+  @return red($hex), green($hex), blue($hex);
+}

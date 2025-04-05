@@ -1,0 +1,189 @@
+// src/styles/base/_typography.scss
+@import "../abstracts/variables";
+
+// Base typography styles
+body {
+  font-family: $font-family-primary;
+  font-size: $font-size-md;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+}
+
+// Headings
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: $spacing-md;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: $font-size-3xl;
+}
+
+h2 {
+  font-size: $font-size-2xl;
+}
+
+h3 {
+  font-size: $font-size-xl;
+}
+
+h4 {
+  font-size: $font-size-lg;
+}
+
+h5 {
+  font-size: $font-size-md;
+  font-weight: 600;
+}
+
+h6 {
+  font-size: $font-size-sm;
+  font-weight: 600;
+}
+
+// Paragraphs
+p {
+  margin-top: 0;
+  margin-bottom: $spacing-md;
+}
+
+// Links
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: darken(#4a90e2, 15%);
+    text-decoration: underline;
+  }
+}
+
+// Lists
+ul,
+ol {
+  margin-top: 0;
+  margin-bottom: $spacing-md;
+}
+
+// Code
+code,
+pre {
+  font-family: $font-family-secondary;
+  font-size: 0.9em;
+}
+
+pre {
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+  overflow: auto;
+  border-radius: 4px;
+  background-color: var(--color-background-secondary);
+}
+
+code {
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  background-color: var(--color-background-secondary);
+}
+
+// Blockquote
+blockquote {
+  padding: $spacing-md;
+  margin: 0 0 $spacing-md;
+  border-left: 4px solid var(--color-border);
+  background-color: var(--color-background-secondary);
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Small text
+small {
+  font-size: $font-size-xs;
+}
+
+// Strong
+strong {
+  font-weight: 600;
+}
+
+// Text utilities
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-success {
+  color: var(--color-success);
+}
+
+.text-warning {
+  color: var(--color-warning);
+}
+
+.text-error {
+  color: var(--color-error);
+}
+
+.text-muted {
+  color: var(--color-text-tertiary);
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Responsive typography
+@media (max-width: $breakpoint-md) {
+  h1 {
+    font-size: $font-size-2xl;
+  }
+
+  h2 {
+    font-size: $font-size-xl;
+  }
+
+  h3 {
+    font-size: $font-size-lg;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  body {
+    font-size: $font-size-sm;
+  }
+
+  h1 {
+    font-size: $font-size-xl;
+  }
+
+  h2 {
+    font-size: $font-size-lg;
+  }
+
+  h3 {
+    font-size: $font-size-md;
+  }
+}

@@ -1,0 +1,195 @@
+// src/components/dashboard/widgets/NotificationsWidget.module.scss
+@import "../../../styles/abstracts/variables";
+@import "../../../styles/abstracts/mixins";
+
+.notificationsWidget {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.widgetTitle {
+  font-size: $font-size-lg;
+  margin-top: 0;
+  margin-bottom: $spacing-md;
+  color: var(--color-text-primary);
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 40px;
+    height: 3px;
+    background-color: var(--color-primary);
+    border-radius: 2px;
+  }
+}
+
+.emptyState {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-tertiary);
+
+  .emptyIcon {
+    font-size: 32px;
+    margin-bottom: $spacing-sm;
+    opacity: 0.5;
+  }
+
+  .emptyText {
+    font-size: $font-size-sm;
+    margin: 0;
+  }
+}
+
+.notificationsList {
+  flex: 1;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--color-primary-rgb), 0.3);
+    border-radius: 2px;
+  }
+}
+
+.notificationItem {
+  display: flex;
+  align-items: center;
+  padding: $spacing-sm;
+  border-radius: 6px;
+  background-color: var(--color-background-secondary);
+  margin-bottom: $spacing-sm;
+  transition: transform $transition-fast, background-color $transition-fast;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-2px);
+    background-color: rgba(var(--color-primary-rgb), 0.05);
+  }
+
+  &.important {
+    border-left: 3px solid var(--color-primary);
+  }
+
+  &.critical {
+    border-left: 3px solid var(--color-error);
+  }
+
+  &.warning {
+    border-left: 3px solid var(--color-warning);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+  }
+
+  &.important::after {
+    background-color: var(--color-primary);
+  }
+
+  &.critical::after {
+    background-color: var(--color-error);
+  }
+
+  &.warning::after {
+    background-color: var(--color-warning);
+  }
+}
+
+.notificationIcon {
+  font-size: 20px;
+  margin-right: $spacing-sm;
+  min-width: 24px;
+  text-align: center;
+}
+
+.notificationContent {
+  flex: 1;
+}
+
+.notificationMessage {
+  margin: 0 0 2px 0;
+  font-size: $font-size-sm;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.notificationTime {
+  font-size: $font-size-xs;
+  color: var(--color-text-tertiary);
+}
+
+.notificationAction {
+  background: none;
+  border: none;
+  color: var(--color-text-tertiary);
+  font-size: $font-size-md;
+  cursor: pointer;
+  padding: $spacing-xs;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color $transition-fast, color $transition-fast;
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+}
+
+.notificationsFooter {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $spacing-md;
+  padding-top: $spacing-sm;
+  border-top: 1px solid var(--color-border);
+}
+
+.viewAllButton,
+.clearButton {
+  padding: $spacing-xs $spacing-sm;
+  font-size: $font-size-xs;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color $transition-fast, color $transition-fast;
+}
+
+.viewAllButton {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border: none;
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+}
+
+.clearButton {
+  background: none;
+  border: none;
+  color: var(--color-text-tertiary);
+
+  &:hover {
+    color: var(--color-error);
+  }
+}

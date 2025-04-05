@@ -1,0 +1,285 @@
+// src/components/office/OfficeView.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.officeContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.officeView {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: $spacing-lg;
+  border-radius: 8px;
+  transition: background-color $transition-normal, box-shadow $transition-normal;
+  overflow-y: auto;
+
+  // Office tiers with different styles
+  &.tier0 {
+    background-color: var(--office-tier1-bg, #f0f0f0);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: repeating-linear-gradient(
+        45deg,
+        #ccc,
+        #ccc 10px,
+        #bbb 10px,
+        #bbb 20px
+      );
+    }
+  }
+
+  &.tier1 {
+    background-color: var(--office-tier2-bg, #e5e5e5);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  &.tier2 {
+    background-color: var(--office-tier3-bg, #d8d8d8);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &.tier3 {
+    background-color: var(--office-tier4-bg, #cccccc);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    background-image: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+
+  &.tier4,
+  &.tier5 {
+    background-color: #f8f8f8;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    background-image: linear-gradient(
+        to right,
+        rgba(var(--color-primary-rgb), 0.05) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(var(--color-primary-rgb), 0.05) 1px,
+        transparent 1px
+      );
+    background-size: 20px 20px;
+  }
+}
+
+.officeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+
+  h2 {
+    font-size: $font-size-xl;
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+}
+
+.officeStats {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+
+  span {
+    font-size: $font-size-sm;
+    color: var(--color-text-secondary);
+  }
+}
+
+.upgradeButton {
+  padding: $spacing-xs $spacing-md;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: background-color $transition-fast, transform $transition-fast;
+
+  &:hover:not(:disabled) {
+    background-color: darken(#4a90e2, 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+.officeBonuses {
+  display: flex;
+  gap: $spacing-lg;
+  margin-bottom: $spacing-md;
+
+  span {
+    font-size: $font-size-sm;
+    padding: $spacing-xs $spacing-sm;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+
+    &:first-child {
+      color: var(--color-success);
+    }
+
+    &:last-child {
+      color: var(--color-primary);
+    }
+  }
+}
+
+.officeDescription {
+  font-size: $font-size-sm;
+  color: var(--color-text-secondary);
+  margin-bottom: $spacing-xl;
+  font-style: italic;
+}
+
+.teamArea {
+  h3 {
+    font-size: $font-size-lg;
+    margin-bottom: $spacing-md;
+    color: var(--color-text-primary);
+  }
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: $spacing-md;
+}
+
+.teamMemberWrapper {
+  cursor: pointer;
+  transition: transform $transition-fast;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.emptySlot {
+  height: 150px;
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  transition: background-color $transition-fast;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+
+  .emptySlotIcon {
+    font-size: 24px;
+    margin-bottom: $spacing-sm;
+  }
+}
+
+// Modal styles
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $z-index-modal;
+}
+
+.modal {
+  background-color: white;
+  border-radius: 8px;
+  padding: $spacing-lg;
+  width: 400px;
+  max-width: 90vw;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+
+  h3 {
+    margin-top: 0;
+    color: var(--color-text-primary);
+  }
+
+  p {
+    color: var(--color-text-secondary);
+  }
+}
+
+.modalButtons {
+  display: flex;
+  gap: $spacing-md;
+  margin-top: $spacing-lg;
+  justify-content: flex-end;
+
+  button {
+    padding: $spacing-xs $spacing-md;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: $font-size-sm;
+    transition: background-color $transition-fast;
+  }
+}
+
+.confirmButton {
+  background-color: var(--color-primary);
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: darken(#4a90e2, 10%);
+  }
+
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+}
+
+.cancelButton {
+  background-color: #f5f5f5;
+  color: var(--color-text-primary);
+
+  &:hover {
+    background-color: #e5e5e5;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-md) {
+  .officeHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-sm;
+  }
+
+  .teamGrid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}

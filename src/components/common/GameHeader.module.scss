@@ -1,0 +1,347 @@
+// src/components/common/GameHeader.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.header {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-background-primary);
+  border-bottom: 1px solid var(--color-border);
+  padding: $spacing-sm $spacing-lg;
+  height: 64px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  z-index: 5;
+}
+
+.logoSection {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform $transition-fast;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  .logo {
+    font-size: 24px;
+    margin-right: $spacing-sm;
+  }
+
+  .companyInfo {
+    display: flex;
+    flex-direction: column;
+
+    .companyName {
+      font-size: $font-size-lg;
+      font-weight: 600;
+      margin: 0;
+      color: var(--color-text-primary);
+    }
+
+    .productName {
+      font-size: $font-size-xs;
+      color: var(--color-text-secondary);
+    }
+  }
+}
+
+.statsSection {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: $spacing-lg;
+
+  .statItem {
+    display: flex;
+    align-items: center;
+    margin-right: $spacing-lg;
+
+    .statIcon {
+      font-size: 18px;
+      margin-right: $spacing-xs;
+    }
+
+    .statValue {
+      font-size: $font-size-sm;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      font-family: $font-family-secondary;
+    }
+  }
+}
+
+.speedControls {
+  display: flex;
+  align-items: center;
+
+  .speedButton {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: $spacing-xs;
+    border-radius: 4px;
+    margin-right: $spacing-xs;
+
+    &:hover {
+      background-color: var(--color-background-secondary);
+    }
+  }
+
+  .speedSelector {
+    display: flex;
+    background-color: var(--color-background-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+
+    .speedOption {
+      background: none;
+      border: none;
+      padding: $spacing-xs $spacing-sm;
+      font-size: $font-size-xs;
+      cursor: pointer;
+      transition: all $transition-fast;
+
+      &:hover:not(.active):not(:disabled) {
+        background-color: rgba(var(--color-primary-rgb), 0.1);
+      }
+
+      &.active {
+        background-color: var(--color-primary);
+        color: white;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+.controlsSection {
+  display: flex;
+  align-items: center;
+
+  .iconButton {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: $spacing-xs;
+    border-radius: 50%;
+    margin-left: $spacing-xs;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: var(--color-background-secondary);
+    }
+  }
+}
+
+// Mobile menu (shows on smaller screens)
+.mobileMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-top: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  width: 180px;
+  overflow: hidden;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+
+  button {
+    width: 100%;
+    text-align: left;
+    padding: $spacing-sm $spacing-md;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: $font-size-sm;
+    color: var(--color-text-primary);
+    transition: background-color $transition-fast;
+
+    &:hover {
+      background-color: var(--color-background-secondary);
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--color-border);
+    }
+  }
+}
+
+// Settings panel
+.settingsPanel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--color-background-primary);
+  border: 1px solid var(--color-border);
+  border-top: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  width: 300px;
+  padding: $spacing-md;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+
+  h3 {
+    font-size: $font-size-md;
+    margin-top: 0;
+    margin-bottom: $spacing-md;
+    color: var(--color-text-primary);
+  }
+
+  .settingItem {
+    margin-bottom: $spacing-md;
+
+    label {
+      display: block;
+      font-size: $font-size-sm;
+      color: var(--color-text-secondary);
+      margin-bottom: $spacing-xs;
+    }
+
+    .settingControls {
+      display: flex;
+      background-color: var(--color-background-secondary);
+      border-radius: 4px;
+      overflow: hidden;
+
+      button {
+        flex: 1;
+        background: none;
+        border: none;
+        padding: $spacing-xs $spacing-sm;
+        font-size: $font-size-xs;
+        cursor: pointer;
+        transition: all $transition-fast;
+
+        &:hover:not(.active) {
+          background-color: rgba(var(--color-primary-rgb), 0.1);
+        }
+
+        &.active {
+          background-color: var(--color-primary);
+          color: white;
+        }
+      }
+    }
+
+    .themeToggle {
+      width: 100%;
+      padding: $spacing-xs $spacing-sm;
+      background-color: var(--color-background-secondary);
+      border: none;
+      border-radius: 4px;
+      font-size: $font-size-sm;
+      cursor: pointer;
+      transition: background-color $transition-fast;
+
+      &:hover {
+        background-color: rgba(var(--color-primary-rgb), 0.1);
+      }
+    }
+  }
+
+  .settingActions {
+    display: flex;
+    gap: $spacing-sm;
+    margin-top: $spacing-lg;
+
+    button {
+      flex: 1;
+      padding: $spacing-sm;
+      border: none;
+      border-radius: 4px;
+      font-size: $font-size-sm;
+      cursor: pointer;
+      transition: all $transition-fast;
+    }
+
+    .saveButton {
+      background-color: var(--color-primary);
+      color: white;
+
+      &:hover {
+        background-color: darken(#4a90e2, 10%);
+      }
+    }
+
+    .closeButton {
+      background-color: var(--color-background-secondary);
+      color: var(--color-text-primary);
+
+      &:hover {
+        background-color: darken(#f5f5f5, 5%);
+      }
+    }
+  }
+}
+
+// Responsive styles
+@media (max-width: $breakpoint-lg) {
+  .statsSection {
+    .statItem {
+      &:nth-child(2) {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .header {
+    padding: $spacing-sm;
+  }
+
+  .logoSection {
+    .companyInfo {
+      .productName {
+        display: none;
+      }
+    }
+  }
+
+  .statsSection {
+    margin-right: $spacing-sm;
+
+    .speedControls {
+      .speedSelector {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .statsSection {
+    .statItem {
+      margin-right: $spacing-sm;
+
+      .statValue {
+        font-size: $font-size-xs;
+      }
+    }
+  }
+
+  .controlsSection {
+    .iconButton {
+      &:not(:last-child) {
+        display: none;
+      }
+    }
+  }
+}

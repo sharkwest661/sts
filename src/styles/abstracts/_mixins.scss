@@ -1,0 +1,219 @@
+// src/styles/abstracts/_mixins.scss
+
+// Media Queries
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: $breakpoint-sm) {
+      @content;
+    }
+  } @else if $breakpoint == md {
+    @media (max-width: $breakpoint-md) {
+      @content;
+    }
+  } @else if $breakpoint == lg {
+    @media (max-width: $breakpoint-lg) {
+      @content;
+    }
+  } @else if $breakpoint == xl {
+    @media (max-width: $breakpoint-xl) {
+      @content;
+    }
+  }
+}
+
+// Flexbox utilities
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Typography
+@mixin font-size($size) {
+  font-size: $size;
+  line-height: calc(#{$size} * 1.5);
+}
+
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Shadows
+@mixin shadow-sm {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@mixin shadow-md {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+@mixin shadow-lg {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+@mixin shadow-xl {
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+}
+
+// Transitions
+@mixin transition($property: all, $duration: 0.3s, $easing: ease) {
+  transition: $property $duration $easing;
+}
+
+// Gradients
+@mixin gradient-primary {
+  background: linear-gradient(
+    45deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
+}
+
+@mixin gradient-dark {
+  background: linear-gradient(45deg, #2d3748, #1a202c);
+}
+
+// Buttons
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xs $spacing-md;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all $transition-fast;
+  border: none;
+  outline: none;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+@mixin button-primary {
+  @include button-base;
+  background-color: var(--color-primary);
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: darken(#4a90e2, 10%);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+}
+
+@mixin button-secondary {
+  @include button-base;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+
+  &:hover:not(:disabled) {
+    background-color: darken(#f5f5f5, 5%);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+}
+
+// Cards
+@mixin card {
+  background-color: var(--color-background-primary);
+  border-radius: 8px;
+  padding: $spacing-lg;
+  @include shadow-md;
+}
+
+// Inputs
+@mixin input-base {
+  width: 100%;
+  padding: $spacing-sm;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+  transition: border-color $transition-fast, box-shadow $transition-fast;
+
+  &:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+  }
+
+  &:disabled {
+    background-color: var(--color-background-secondary);
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: var(--color-text-tertiary);
+  }
+}
+
+// Focus styles
+@mixin focus-ring {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.4);
+}
+
+// Status indicators
+@mixin status-dot($color) {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: $color;
+}
+
+// Animation
+@mixin animate($animation, $duration: 1s, $timing: ease, $delay: 0s) {
+  animation-name: $animation;
+  animation-duration: $duration;
+  animation-timing-function: $timing;
+  animation-delay: $delay;
+  animation-fill-mode: both;
+}
+
+// Scrollbars
+@mixin custom-scrollbar {
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-background-secondary);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--color-primary-rgb), 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background-color: rgba(var(--color-primary-rgb), 0.5);
+    }
+  }
+}
+
+// Grid
+@mixin grid($columns: 1fr, $gap: $spacing-md) {
+  display: grid;
+  grid-template-columns: $columns;
+  gap: $gap;
+}
