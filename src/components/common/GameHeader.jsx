@@ -21,18 +21,18 @@ const GameHeader = ({ toggleTheme, theme }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
 
-  // Get game state using proper selector pattern
+  // Get game state using proper selector pattern - each as separate selector
   const companyName = useGameStore((state) => state.companyName);
   const cash = useGameStore((state) => state.cash);
   const startupIdea = useGameStore((state) => state.startupIdea);
   const gameTime = useGameStore((state) => state.gameTime);
   const gameSpeed = useGameStore((state) => state.gameSpeed);
 
-  // Get actions
+  // Get actions - separate from state
   const setGameSpeed = useGameStore((state) => state.setGameSpeed);
   const saveGame = useGameStore((state) => state.saveGame);
 
-  // Format the game time display
+  // Format the game time display - memoize to prevent recalculation
   const formattedTime = useMemo(() => {
     if (!gameTime) return "Day 1 - 00:00";
 
@@ -42,19 +42,23 @@ const GameHeader = ({ toggleTheme, theme }) => {
       .padStart(2, "0")}`;
   }, [gameTime]);
 
-  // Handle manual save
-  const handleSave = () => {
-    saveGame();
-    // Show notification (would be handled by a notification system)
-    alert("Game saved successfully");
-  };
+  // Handle manual save - memoize the handler
+  const handleSave = useMemo(() => {
+    return () => {
+      saveGame();
+      // Show notification using alert for simplicity
+      alert("Game saved successfully");
+    };
+  }, [saveGame]);
 
-  // Format large numbers with commas
-  const formatNumber = (num) => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 0 });
-  };
+  // Format large numbers with commas - memoize function
+  const formatNumber = useMemo(() => {
+    return (num) => {
+      return num.toLocaleString("en-US", { maximumFractionDigits: 0 });
+    };
+  }, []);
 
-  // Game speed options
+  // Game speed options - doesn't change so we can memoize
   const speedOptions = useMemo(
     () => [
       { value: 0.5, label: "0.5x" },
@@ -64,6 +68,22 @@ const GameHeader = ({ toggleTheme, theme }) => {
     ],
     []
   );
+
+  // Memoize handlers to prevent recreation on each render
+  const handleToggleMenu = useMemo(() => {
+    return () => setShowMenu((prev) => !prev);
+  }, []);
+
+  const handleToggleSettings = useMemo(() => {
+    return () => setShowSettings((prev) => !prev);
+  }, []);
+
+  const handleNavigate = useMemo(() => {
+    return (path) => {
+      navigate(path);
+      setShowMenu(false);
+    };
+  }, [navigate]);
 
   return (
     <header className={styles.header}>
@@ -150,7 +170,7 @@ const GameHeader = ({ toggleTheme, theme }) => {
 
         <button
           className={styles.iconButton}
-          onClick={() => setShowSettings(!showSettings)}
+          onClick={handleToggleSettings}
           title="Settings"
           aria-label="Open settings"
         >
@@ -159,7 +179,7 @@ const GameHeader = ({ toggleTheme, theme }) => {
 
         <button
           className={styles.iconButton}
-          onClick={() => setShowMenu(!showMenu)}
+          onClick={handleToggleMenu}
           title="Menu"
           aria-label="Open menu"
         >
@@ -169,52 +189,16 @@ const GameHeader = ({ toggleTheme, theme }) => {
 
       {showMenu && (
         <div className={styles.mobileMenu}>
-          <button
-            onClick={() => {
-              navigate("/dashboard");
-              setShowMenu(false);
-            }}
-          >
+          <button onClick={() => handleNavigate("/dashboard")}>
             Dashboard
           </button>
-          <button
-            onClick={() => {
-              navigate("/office");
-              setShowMenu(false);
-            }}
-          >
-            Office
-          </button>
-          <button
-            onClick={() => {
-              navigate("/team");
-              setShowMenu(false);
-            }}
-          >
-            Team
-          </button>
-          <button
-            onClick={() => {
-              navigate("/product");
-              setShowMenu(false);
-            }}
-          >
-            Product
-          </button>
-          <button
-            onClick={() => {
-              navigate("/investors");
-              setShowMenu(false);
-            }}
-          >
+          <button onClick={() => handleNavigate("/office")}>Office</button>
+          <button onClick={() => handleNavigate("/team")}>Team</button>
+          <button onClick={() => handleNavigate("/product")}>Product</button>
+          <button onClick={() => handleNavigate("/investors")}>
             Investors
           </button>
-          <button
-            onClick={() => {
-              navigate("/marketing");
-              setShowMenu(false);
-            }}
-          >
+          <button onClick={() => handleNavigate("/marketing")}>
             Marketing
           </button>
         </div>
@@ -257,7 +241,7 @@ const GameHeader = ({ toggleTheme, theme }) => {
 
             <button
               className={styles.closeButton}
-              onClick={() => setShowSettings(false)}
+              onClick={handleToggleSettings}
             >
               Close
             </button>

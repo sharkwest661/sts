@@ -1,7 +1,6 @@
 // src/components/dashboard/Dashboard.jsx
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { shallow } from "zustand/shallow";
 import styles from "./Dashboard.module.scss";
 import { useGameStore } from "../../store";
 import useTeamStore from "../../store/teamStore";
@@ -29,25 +28,20 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [timeOfDay, setTimeOfDay] = useState("morning");
 
-  // Get game state - use proper selector pattern
-  const gameState = useGameStore(
-    (state) => ({
-      companyName: state.companyName,
-      companyValuation: state.companyValuation,
-      cash: state.cash,
-      revenue: state.revenue,
-      expenses: state.expenses,
-      startupIdea: state.startupIdea,
-      reputation: state.reputation,
-      gameTime: state.gameTime,
-    }),
-    shallow
-  );
+  // FIXED: Use individual selectors instead of destructuring to prevent infinite updates
+  const companyName = useGameStore((state) => state.companyName);
+  const companyValuation = useGameStore((state) => state.companyValuation);
+  const cash = useGameStore((state) => state.cash);
+  const revenue = useGameStore((state) => state.revenue);
+  const expenses = useGameStore((state) => state.expenses);
+  const startupIdea = useGameStore((state) => state.startupIdea);
+  const reputation = useGameStore((state) => state.reputation);
+  const gameTime = useGameStore((state) => state.gameTime);
 
-  // FIXED: Don't use method calls in selectors, get raw data instead
+  // FIXED: Get raw team members data instead of calling methods in render
   const teamMembers = useTeamStore((state) => state.teamMembers);
 
-  // FIXED: Calculate team stats locally instead of calling the method
+  // FIXED: Calculate team stats locally with useMemo instead of calling the method
   const teamStats = useMemo(() => {
     if (!teamMembers || teamMembers.length === 0) {
       return {
@@ -107,9 +101,9 @@ const Dashboard = () => {
 
   // Set time of day based on game time
   useEffect(() => {
-    if (!gameState.gameTime) return;
+    if (!gameTime) return;
 
-    const { hour } = gameState.gameTime;
+    const { hour } = gameTime;
 
     if (hour >= 5 && hour < 12) {
       setTimeOfDay("morning");
@@ -118,23 +112,22 @@ const Dashboard = () => {
     } else {
       setTimeOfDay("evening");
     }
-  }, [gameState.gameTime]);
+  }, [gameTime]);
 
-  // Format large numbers with commas
-  const formatNumber = (num) => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 0 });
-  };
+  // Format large numbers with commas - memoize to prevent recreation
+  const formatNumber = useMemo(() => {
+    return (num) => {
+      return num.toLocaleString("en-US", { maximumFractionDigits: 0 });
+    };
+  }, []);
 
   // Calculate metrics using useMemo to prevent recalculations
   const metrics = useMemo(() => {
     // Calculate monthly profit/loss
-    const monthlyProfitLoss = gameState.revenue - gameState.expenses;
+    const monthlyProfitLoss = revenue - expenses;
 
     // Calculate burn rate
-    const burnRate =
-      gameState.expenses > 0
-        ? (gameState.cash / gameState.expenses).toFixed(1)
-        : "∞";
+    const burnRate = expenses > 0 ? (cash / expenses).toFixed(1) : "∞";
 
     const monthsLabel =
       burnRate === "∞"
@@ -148,53 +141,77 @@ const Dashboard = () => {
       burnRate,
       monthsLabel,
     };
-  }, [gameState.revenue, gameState.expenses, gameState.cash]);
+  }, [revenue, expenses, cash]);
 
   // Mock data for widgets that would normally come from their respective stores
-  const productStatus = {
-    currentVersion: "0.2",
-    features: 4,
-    bugs: 7,
-    development: 68, // percentage complete
-    nextRelease: "in 3 days",
-  };
+  // FIXED: Use useMemo to prevent recreating these objects on every render
+  const productStatus = useMemo(
+    () => ({
+      currentVersion: "0.2",
+      features: 4,
+      bugs: 7,
+      development: 68, // percentage complete
+      nextRelease: "in 3 days",
+    }),
+    []
+  );
 
-  const recentNotifications = [
-    {
-      id: 1,
-      type: "investor",
-      message: 'VC firm "Money Burner Capital" is interested in your startup',
-      time: "2h ago",
-    },
-    {
-      id: 2,
-      type: "team",
-      message: "Developer Jane is feeling overworked",
-      time: "5h ago",
-    },
-    {
-      id: 3,
-      type: "product",
-      message: "Critical bug reported in production",
-      time: "1d ago",
-    },
-  ];
+  const recentNotifications = useMemo(
+    () => [
+      {
+        id: 1,
+        type: "investor",
+        message: 'VC firm "Money Burner Capital" is interested in your startup',
+        time: "2h ago",
+      },
+      {
+        id: 2,
+        type: "team",
+        message: "Developer Jane is feeling overworked",
+        time: "5h ago",
+      },
+      {
+        id: 3,
+        type: "product",
+        message: "Critical bug reported in production",
+        time: "1d ago",
+      },
+    ],
+    []
+  );
 
-  const pendingTasks = [
-    { id: 1, title: "Hire a designer", priority: "high", deadline: "2d" },
-    {
-      id: 2,
-      title: "Fix payment system bug",
-      priority: "critical",
-      deadline: "1d",
-    },
-    {
-      id: 3,
-      title: "Prepare investor pitch",
-      priority: "medium",
-      deadline: "5d",
-    },
-  ];
+  const pendingTasks = useMemo(
+    () => [
+      { id: 1, title: "Hire a designer", priority: "high", deadline: "2d" },
+      {
+        id: 2,
+        title: "Fix payment system bug",
+        priority: "critical",
+        deadline: "1d",
+      },
+      {
+        id: 3,
+        title: "Prepare investor pitch",
+        priority: "medium",
+        deadline: "5d",
+      },
+    ],
+    []
+  );
+
+  // FIXED: Memoize navigation handlers to prevent recreating function references
+  const handleNavigateToTeam = useMemo(
+    () => () => navigate("/team"),
+    [navigate]
+  );
+  const handleNavigateToProduct = useMemo(
+    () => () => navigate("/product"),
+    [navigate]
+  );
+  const handleNavigateToInvestors = useMemo(
+    () => () => navigate("/investors"),
+    [navigate]
+  );
 
   return (
     <div className={styles.dashboard}>
@@ -203,48 +220,46 @@ const Dashboard = () => {
           <h1>Good {timeOfDay}, CEO</h1>
           <p className={styles.headerTagline}>
             Here's the current status of{" "}
-            <span className={styles.companyHighlight}>
-              {gameState.companyName}
-            </span>
+            <span className={styles.companyHighlight}>{companyName}</span>
           </p>
         </div>
 
         <div className={styles.valuationDisplay}>
           <span className={styles.valuationLabel}>Company Valuation</span>
           <span className={styles.valuationAmount}>
-            ${formatNumber(gameState.companyValuation)}
+            ${formatNumber(companyValuation)}
           </span>
         </div>
       </header>
 
       <div className={styles.dashboardGrid}>
         <MetricsWidget
-          cash={gameState.cash}
-          revenue={gameState.revenue}
-          expenses={gameState.expenses}
+          cash={cash}
+          revenue={revenue}
+          expenses={expenses}
           burnRate={metrics.burnRate}
           monthlyProfitLoss={metrics.monthlyProfitLoss}
           monthsLabel={metrics.monthsLabel}
-          reputation={gameState.reputation}
+          reputation={reputation}
         />
 
         <TeamOverviewWidget
           teamStats={teamStats}
           teamCount={teamMembers.length}
-          onViewTeam={() => navigate("/team")}
+          onViewTeam={handleNavigateToTeam}
         />
 
         <ProductStatusWidget
-          productName={gameState.startupIdea?.name || "Your Product"}
+          productName={startupIdea?.name || "Your Product"}
           productStatus={productStatus}
-          onViewProduct={() => navigate("/product")}
+          onViewProduct={handleNavigateToProduct}
         />
 
         <FinancialWidget
-          cash={gameState.cash}
-          revenue={gameState.revenue}
-          expenses={gameState.expenses}
-          onViewInvestors={() => navigate("/investors")}
+          cash={cash}
+          revenue={revenue}
+          expenses={expenses}
+          onViewInvestors={handleNavigateToInvestors}
         />
 
         <NotificationsWidget notifications={recentNotifications} />
@@ -255,4 +270,5 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+// FIXED: Use React.memo to prevent unnecessary re-renders
+export default React.memo(Dashboard);

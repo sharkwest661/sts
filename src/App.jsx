@@ -1,5 +1,5 @@
-// src/App.jsx (Updated Version)
-import React, { useState, useEffect } from "react";
+// src/App.jsx (Fixed Version)
+import React, { useState, useEffect, useMemo } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -32,7 +32,8 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [theme, setTheme] = useState("light");
 
-  // Get game state
+  // Get game state using proper selector pattern
+  // FIXED: Use individual selectors to prevent unnecessary rerenders
   const gameStarted = useGameStore((state) => state.gameStarted);
 
   // Initialize theme from localStorage on first load
@@ -41,7 +42,7 @@ const App = () => {
     setTheme(savedTheme);
     document.documentElement.setAttribute("data-theme", savedTheme);
 
-    // Initial loading
+    // Initial loading with cleanup
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false);
     }, 1500);
@@ -49,15 +50,17 @@ const App = () => {
     return () => clearTimeout(loadingTimeout);
   }, []);
 
-  // Theme toggle handler
-  const toggleTheme = () => {
-    setTheme((prevTheme) => {
-      const newTheme = prevTheme === "light" ? "dark" : "light";
-      document.documentElement.setAttribute("data-theme", newTheme);
-      localStorage.setItem("theme", newTheme);
-      return newTheme;
-    });
-  };
+  // Theme toggle handler - memoize to prevent recreating on each render
+  const toggleTheme = useMemo(() => {
+    return () => {
+      setTheme((prevTheme) => {
+        const newTheme = prevTheme === "light" ? "dark" : "light";
+        document.documentElement.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+        return newTheme;
+      });
+    };
+  }, []);
 
   // Show loading screen
   if (isLoading) {
