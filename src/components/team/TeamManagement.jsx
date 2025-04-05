@@ -1,25 +1,45 @@
 // src/components/team/TeamManagement.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import styles from "./TeamManagement.module.scss";
 import useTeamStore from "../../store/teamStore";
-import useGameStore from "../../store/gameStore";
+import { useGameStore } from "../../store";
 import TeamMember from "./TeamMember";
+import { useStoreSelector } from "../../utils/useStoreSelector";
 
 const TeamManagement = () => {
   const [activeTab, setActiveTab] = useState("team");
   const [showRecruitModal, setShowRecruitModal] = useState(false);
 
-  // Get team state
-  const teamMembers = useTeamStore((state) => state.teamMembers);
-  const availableRecruits = useTeamStore((state) => state.availableRecruits);
-  const hireTeamMember = useTeamStore((state) => state.hireTeamMember);
-  const fireTeamMember = useTeamStore((state) => state.fireTeamMember);
-  const generateRecruits = useTeamStore((state) => state.generateRecruits);
-  const getTeamStats = useTeamStore((state) => state.getTeamStats);
+  // Get team state using proper selectors
+  const teamMembers = useStoreSelector(
+    useTeamStore,
+    (state) => state.teamMembers
+  );
+  const availableRecruits = useStoreSelector(
+    useTeamStore,
+    (state) => state.availableRecruits
+  );
 
-  // Get game state
-  const cash = useGameStore((state) => state.cash);
-  const officeCapacity = useGameStore((state) => state.officeCapacity);
+  // Get team actions using separate selector
+  const hireTeamMember = useStoreSelector(
+    useTeamStore,
+    (state) => state.hireTeamMember
+  );
+  const fireTeamMember = useStoreSelector(
+    useTeamStore,
+    (state) => state.fireTeamMember
+  );
+  const generateRecruits = useStoreSelector(
+    useTeamStore,
+    (state) => state.generateRecruits
+  );
+
+  // Get game state using proper selectors
+  const cash = useStoreSelector(useGameStore, (state) => state.cash);
+  const officeCapacity = useStoreSelector(
+    useGameStore,
+    (state) => state.officeCapacity
+  );
 
   // Generate recruits when viewing the recruitment tab
   useEffect(() => {
@@ -28,41 +48,78 @@ const TeamManagement = () => {
     }
   }, [activeTab, availableRecruits.length, generateRecruits]);
 
-  // Calculate team stats
-  const teamStats = getTeamStats();
-
-  // Handle hiring a team member
-  const handleHire = (recruit) => {
-    if (teamMembers.length >= officeCapacity) {
-      alert(
-        "Office at maximum capacity! Upgrade your office to hire more team members."
-      );
-      return;
+  // Calculate team stats - memoize to prevent recalculation
+  const teamStats = useMemo(() => {
+    if (!teamMembers || teamMembers.length === 0) {
+      return {
+        totalSalary: 0,
+        headcount: 0,
+        averageMorale: 0,
+      };
     }
 
-    if (cash < recruit.salaryExpectation) {
-      alert("Not enough cash to hire this team member!");
-      return;
-    }
+    return teamMembers.reduce(
+      (stats, member) => ({
+        totalSalary: stats.totalSalary + (member.salary || 0),
+        headcount: stats.headcount + 1,
+        averageMorale:
+          (stats.averageMorale * stats.headcount + member.morale) /
+          (stats.headcount + 1),
+      }),
+      {
+        totalSalary: 0,
+        headcount: 0,
+        averageMorale: 0,
+      }
+    );
+  }, [teamMembers]);
 
-    const result = hireTeamMember(recruit);
-    if (result.success) {
-      // Could implement a success notification here
-    } else {
-      alert(result.message);
-    }
-  };
+  // Handle hiring a team member - use useCallback to prevent function recreation
+  const handleHire = useCallback(
+    (recruit) => {
+      if (teamMembers.length >= officeCapacity) {
+        alert(
+          "Office at maximum capacity! Upgrade your office to hire more team members."
+        );
+        return;
+      }
 
-  // Handle firing a team member
-  const handleFire = (memberId) => {
-    if (
-      confirm(
-        "Are you sure you want to fire this team member? This may affect team morale."
-      )
-    ) {
-      fireTeamMember(memberId);
-    }
-  };
+      if (cash < recruit.salaryExpectation) {
+        alert("Not enough cash to hire this team member!");
+        return;
+      }
+
+      const result = hireTeamMember(recruit);
+      if (!result.success) {
+        alert(result.message);
+      }
+    },
+    [teamMembers.length, officeCapacity, cash, hireTeamMember]
+  );
+
+  // Handle firing a team member - use useCallback to prevent function recreation
+  const handleFire = useCallback(
+    (memberId) => {
+      if (
+        confirm(
+          "Are you sure you want to fire this team member? This may affect team morale."
+        )
+      ) {
+        fireTeamMember(memberId);
+      }
+    },
+    [fireTeamMember]
+  );
+
+  // Handle tab change - use useCallback to prevent function recreation
+  const handleTabChange = useCallback((tab) => {
+    setActiveTab(tab);
+  }, []);
+
+  // Format currency - use memoize to prevent function recreation
+  const formatCurrency = useMemo(() => {
+    return (value) => value.toLocaleString();
+  }, []);
 
   return (
     <div className={styles.teamManagement}>
@@ -80,7 +137,7 @@ const TeamManagement = () => {
           <div className={styles.statItem}>
             <span className={styles.statLabel}>Monthly Salaries</span>
             <span className={styles.statValue}>
-              ${teamStats.totalSalary?.toLocaleString() || 0}
+              ${formatCurrency(teamStats.totalSalary || 0)}
             </span>
           </div>
 
@@ -99,7 +156,7 @@ const TeamManagement = () => {
             className={`${styles.tab} ${
               activeTab === "team" ? styles.active : ""
             }`}
-            onClick={() => setActiveTab("team")}
+            onClick={() => handleTabChange("team")}
           >
             Your Team
           </button>
@@ -108,7 +165,7 @@ const TeamManagement = () => {
             className={`${styles.tab} ${
               activeTab === "recruit" ? styles.active : ""
             }`}
-            onClick={() => setActiveTab("recruit")}
+            onClick={() => handleTabChange("recruit")}
           >
             Recruitment
           </button>
@@ -117,7 +174,7 @@ const TeamManagement = () => {
             className={`${styles.tab} ${
               activeTab === "assignments" ? styles.active : ""
             }`}
-            onClick={() => setActiveTab("assignments")}
+            onClick={() => handleTabChange("assignments")}
           >
             Assignments
           </button>
@@ -134,7 +191,7 @@ const TeamManagement = () => {
                   </p>
                   <button
                     className={styles.recruitButton}
-                    onClick={() => setActiveTab("recruit")}
+                    onClick={() => handleTabChange("recruit")}
                   >
                     Find Team Members
                   </button>
@@ -263,4 +320,5 @@ const TeamManagement = () => {
   );
 };
 
-export default TeamManagement;
+// Export as memoized component to prevent unnecessary re-renders
+export default React.memo(TeamManagement);

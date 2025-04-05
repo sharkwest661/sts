@@ -1,0 +1,277 @@
+// src/components/game/StartupSelector.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.selectorContainer {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  justify-content: center;
+}
+
+.title {
+  font-size: $font-size-3xl;
+  margin-bottom: $spacing-sm;
+  color: var(--color-text-primary);
+  text-align: center;
+
+  background: linear-gradient(
+    45deg,
+    var(--color-primary),
+    var(--color-secondary)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: $font-size-md;
+  margin-bottom: $spacing-xl;
+  color: var(--color-text-secondary);
+  text-align: center;
+  max-width: 600px;
+}
+
+.ideasGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: $spacing-lg;
+  width: 100%;
+  margin-bottom: $spacing-xl;
+}
+
+.ideaCard {
+  background-color: var(--color-background-primary);
+  border-radius: 12px;
+  padding: $spacing-lg;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all $transition-normal;
+  border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  &.selected {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.3);
+  }
+
+  h3 {
+    font-size: $font-size-lg;
+    margin: $spacing-sm 0;
+    color: var(--color-text-primary);
+  }
+}
+
+.ideaIcon {
+  font-size: 36px;
+  margin-bottom: $spacing-sm;
+  align-self: center;
+}
+
+.tagline {
+  color: var(--color-text-secondary);
+  font-size: $font-size-sm;
+  margin-bottom: $spacing-md;
+  line-height: 1.4;
+}
+
+.ideaDetails {
+  margin-top: $spacing-md;
+
+  p {
+    color: var(--color-text-secondary);
+    font-size: $font-size-sm;
+    margin-bottom: $spacing-md;
+    line-height: 1.5;
+  }
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-sm;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: $spacing-xs;
+
+  .statLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+  }
+
+  .statBarContainer {
+    height: 6px;
+    background-color: var(--color-background-secondary);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 2px;
+  }
+
+  .statBar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width $transition-normal;
+
+    &.statMarket {
+      background-color: var(--color-success);
+    }
+
+    &.statComplexity {
+      background-color: var(--color-primary);
+    }
+
+    &.statRisk {
+      background-color: var(--color-error);
+    }
+  }
+
+  .statValue {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+    align-self: flex-end;
+  }
+}
+
+.customIdeaCard {
+  background-color: var(--color-background-secondary);
+  text-align: center;
+
+  h3 {
+    color: var(--color-primary);
+  }
+
+  .comingSoon {
+    font-size: $font-size-xs;
+    color: var(--color-accent);
+    font-style: italic;
+    margin-top: $spacing-sm;
+  }
+}
+
+.companySetup {
+  width: 100%;
+  max-width: 500px;
+  padding: $spacing-lg;
+  background-color: var(--color-background-primary);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+
+  h2 {
+    margin-bottom: $spacing-md;
+    color: var(--color-text-primary);
+  }
+}
+
+.nameInputContainer {
+  margin-bottom: $spacing-lg;
+  position: relative;
+}
+
+.nameInput {
+  width: 100%;
+  padding: $spacing-md;
+  border: 2px solid var(--color-border);
+  border-radius: 6px;
+  font-size: $font-size-md;
+  transition: border-color $transition-fast;
+
+  &:focus {
+    border-color: var(--color-primary);
+    outline: none;
+  }
+
+  &::placeholder {
+    color: var(--color-text-tertiary);
+  }
+}
+
+.nameError {
+  color: var(--color-error);
+  font-size: $font-size-xs;
+  margin-top: $spacing-xs;
+  text-align: left;
+  position: absolute;
+  left: 0;
+}
+
+.startButton {
+  width: 100%;
+  padding: $spacing-md;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: $font-size-md;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color $transition-fast, transform $transition-fast;
+
+  &:hover:not(:disabled) {
+    background-color: darken(#4a90e2, 10%);
+    transform: translateY(-2px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    background-color: var(--color-text-tertiary);
+    cursor: not-allowed;
+  }
+}
+
+// Responsive styles
+@media (max-width: $breakpoint-lg) {
+  .ideasGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .title {
+    font-size: $font-size-2xl;
+  }
+
+  .subtitle {
+    font-size: $font-size-sm;
+  }
+
+  .ideasGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .selectorContainer {
+    padding: $spacing-md;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .title {
+    font-size: $font-size-xl;
+  }
+
+  .ideaCard {
+    padding: $spacing-md;
+  }
+
+  .companySetup {
+    padding: $spacing-md;
+  }
+}

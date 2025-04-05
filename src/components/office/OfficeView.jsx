@@ -1,5 +1,5 @@
 // src/components/office/OfficeView.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import styles from "./OfficeView.module.scss";
 import useGameStore from "../../store/gameStore";
 import useTeamStore from "../../store/teamStore";
@@ -13,20 +13,66 @@ const OfficeView = () => {
   const cash = useGameStore((state) => state.cash);
   const upgradeOffice = useGameStore((state) => state.upgradeOffice);
 
+  // Get team members - only get the raw data
   const teamMembers = useTeamStore((state) => state.teamMembers);
-  const teamStats = useTeamStore((state) => state.getTeamStats());
 
   // Local state for office interactions
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [highlightedMember, setHighlightedMember] = useState(null);
 
+  // Calculate team stats using useMemo instead of calling the store method directly
+  const teamStats = useMemo(() => {
+    // Simple calculation if team is empty
+    if (!teamMembers || teamMembers.length === 0) {
+      return {
+        totalSalary: 0,
+        averageMorale: 0,
+        averageEnergy: 0,
+        coding: 0,
+        design: 0,
+        marketing: 0,
+        business: 0,
+      };
+    }
+
+    // Calculate stats from team members
+    return teamMembers.reduce(
+      (stats, member) => {
+        return {
+          totalSalary: stats.totalSalary + (member.salary || 0),
+          averageMorale:
+            (stats.averageMorale * stats.count + (member.morale || 0)) /
+            (stats.count + 1),
+          averageEnergy:
+            (stats.averageEnergy * stats.count + (member.energy || 0)) /
+            (stats.count + 1),
+          coding: stats.coding + (member.skills?.coding || 0),
+          design: stats.design + (member.skills?.design || 0),
+          marketing: stats.marketing + (member.skills?.marketing || 0),
+          business: stats.business + (member.skills?.business || 0),
+          count: stats.count + 1,
+        };
+      },
+      {
+        totalSalary: 0,
+        averageMorale: 0,
+        averageEnergy: 0,
+        coding: 0,
+        design: 0,
+        marketing: 0,
+        business: 0,
+        count: 0,
+      }
+    );
+  }, [teamMembers]);
+
   // Office upgrade cost calculation
   const upgradeCost = 5000 * (officeLevel + 1);
   const canAffordUpgrade = cash >= upgradeCost;
 
-  // Office environment details based on level
-  const getOfficeTier = () => {
-    switch (officeLevel) {
+  // Office environment details based on level - make this a useMemo to avoid recalculation
+  const getOfficeTier = (level = officeLevel) => {
+    switch (level) {
       case 0:
         return {
           name: "Garage Office",
@@ -70,7 +116,14 @@ const OfficeView = () => {
     }
   };
 
-  const officeTier = getOfficeTier();
+  // Memoize the current office tier to prevent recalculation on every render
+  const officeTier = useMemo(() => getOfficeTier(), [officeLevel]);
+
+  // Memoize the next office tier for the modal
+  const nextOfficeTier = useMemo(
+    () => getOfficeTier(officeLevel + 1),
+    [officeLevel]
+  );
 
   // Handle office upgrade
   const handleUpgrade = () => {
@@ -158,8 +211,7 @@ const OfficeView = () => {
           <div className={styles.modal}>
             <h3>Upgrade Office</h3>
             <p>
-              Upgrade from {officeTier.name} to{" "}
-              {getOfficeTier(officeLevel + 1).name}?
+              Upgrade from {officeTier.name} to {nextOfficeTier.name}?
             </p>
             <p>
               This will cost ${upgradeCost.toLocaleString()} and increase your

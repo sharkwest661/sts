@@ -1,27 +1,23 @@
 // src/components/game/GameInitializer.jsx
 import React, { useEffect, useRef } from "react";
 import { useGameStore } from "../../store";
-import useAchievementStore from "../../store/achievementStore";
 
 /**
  * GameInitializer handles the core game loop and initializes game systems
  * Fixed version with proper cleanup and frame rate limiting
  */
 const GameInitializer = () => {
-  // Get store methods
+  // Get store methods - IMPORTANT: Use individual selectors, not full state
   const incrementTick = useGameStore((state) => state.incrementTick);
   const gameSpeed = useGameStore((state) => state.gameSpeed);
   const gameStarted = useGameStore((state) => state.gameStarted);
-  const checkAchievements = useAchievementStore(
-    (state) => state.checkAchievements
-  );
 
-  // Use refs to store the timer and last time to prevent re-renders from affecting the loop
+  // Use refs to store the timer and last time to prevent re-renders affecting the loop
   const timerRef = useRef(null);
   const lastTickTimeRef = useRef(Date.now());
   const targetFpsRef = useRef(1); // 1 frame per second default tick rate
 
-  // Initialize game systems
+  // Initialize game systems - only runs once when gameStarted changes to true
   useEffect(() => {
     if (!gameStarted) return;
 
@@ -46,12 +42,17 @@ const GameInitializer = () => {
     }
   }, [gameStarted]);
 
-  // Set up and manage the game loop
+  // Set up the game loop - creates a new effect when gameSpeed changes
   useEffect(() => {
     if (!gameStarted) return;
 
     // Update the target FPS based on game speed
     targetFpsRef.current = gameSpeed;
+
+    // Cancel any existing timer to prevent duplicates
+    if (timerRef.current) {
+      cancelAnimationFrame(timerRef.current);
+    }
 
     // Game loop function with frame rate control
     const gameLoop = () => {
@@ -59,41 +60,34 @@ const GameInitializer = () => {
       const elapsed = now - lastTickTimeRef.current;
       const targetFrameTime = 1000 / targetFpsRef.current;
 
-      // Only process a tick if enough time has passed
-      if (elapsed >= targetFrameTime) {
+      // Only process a tick if enough time has passed and game isn't paused
+      if (elapsed >= targetFrameTime && gameSpeed > 0) {
         lastTickTimeRef.current = now - (elapsed % targetFrameTime);
 
         try {
           // Process game tick
           incrementTick();
-
-          // Check achievements periodically (not on every tick)
-          // This reduces the frequency of cross-store checks
-          if (Math.random() < 0.2) {
-            // 20% chance per tick
-            setTimeout(() => {
-              checkAchievements();
-            }, 50);
-          }
         } catch (error) {
           console.error("Error in game loop:", error);
         }
       }
 
-      // Schedule the next frame
+      // Schedule the next frame - store ref for cleanup
       timerRef.current = requestAnimationFrame(gameLoop);
     };
 
     // Start the game loop
     timerRef.current = requestAnimationFrame(gameLoop);
 
-    // Cleanup function to cancel the animation frame
+    // Cleanup function to cancel the animation frame when component unmounts
+    // or when gameSpeed/gameStarted changes
     return () => {
       if (timerRef.current) {
         cancelAnimationFrame(timerRef.current);
+        timerRef.current = null;
       }
     };
-  }, [gameStarted, gameSpeed, incrementTick, checkAchievements]);
+  }, [gameStarted, gameSpeed, incrementTick]);
 
   // No UI rendering needed
   return null;
