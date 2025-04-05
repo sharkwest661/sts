@@ -1,88 +1,101 @@
 // src/components/game/GameInitializer.jsx
-import React, { useEffect } from "react";
-import {
-  useGameStore,
-  useTeamStore,
-  useProductStore,
-  useMarketingStore,
-  useInvestorStore,
-} from "../../store";
+import React, { useEffect, useRef } from "react";
+import { useGameStore } from "../../store";
+import useAchievementStore from "../../store/achievementStore";
 
-// This component doesn't render anything but handles game initialization
+/**
+ * GameInitializer handles the core game loop and initializes game systems
+ * Fixed version with proper cleanup and frame rate limiting
+ */
 const GameInitializer = () => {
-  const gameStarted = useGameStore((state) => state.gameStarted);
-  const gameTick = useGameStore((state) => state.gameTick);
-  const gameSpeed = useGameStore((state) => state.gameSpeed);
+  // Get store methods
   const incrementTick = useGameStore((state) => state.incrementTick);
+  const gameSpeed = useGameStore((state) => state.gameSpeed);
+  const gameStarted = useGameStore((state) => state.gameStarted);
+  const checkAchievements = useAchievementStore(
+    (state) => state.checkAchievements
+  );
 
-  // Initialize stores when game starts
+  // Use refs to store the timer and last time to prevent re-renders from affecting the loop
+  const timerRef = useRef(null);
+  const lastTickTimeRef = useRef(Date.now());
+  const targetFpsRef = useRef(1); // 1 frame per second default tick rate
+
+  // Initialize game systems
   useEffect(() => {
-    if (gameStarted && gameTick === 0) {
-      console.log("Initializing game stores...");
+    if (!gameStarted) return;
 
-      // Initialize stores
-      useProductStore.getState().initializeProduct();
-      useInvestorStore.getState().initializeInvestors();
+    // Initialize stores that need it
+    try {
+      // Initialize each subsystem with proper error handling
+      if (window.teamStore) {
+        window.teamStore.getState().generateRecruits();
+      }
 
-      // Add initial objectives
-      const addObjective = useGameStore.getState().addObjective;
+      if (window.productStore) {
+        window.productStore.getState().initializeProduct();
+      }
 
-      addObjective({
-        title: "Build Your Team",
-        description: "Hire at least 3 team members",
-        checkCompletion: (state) => state.teamSize >= 3,
-        reward: "Reputation Boost",
-      });
+      if (window.investorStore) {
+        window.investorStore.getState().initializeInvestors();
+      }
 
-      addObjective({
-        title: "Launch Your Product",
-        description: "Complete and launch at least 3 features",
-        checkCompletion: () => {
-          const features = useProductStore.getState().features;
-          return features.filter((f) => f.status === "completed").length >= 3;
-        },
-        reward: "User Growth",
-      });
-
-      addObjective({
-        title: "Secure Funding",
-        description: "Get an investment of at least $50,000",
-        checkCompletion: () => {
-          const totalFunding = useInvestorStore.getState().totalFundingRaised;
-          return totalFunding >= 50000;
-        },
-        reward: "Cash Boost",
-      });
-
-      // Welcome notification
-      useGameStore.getState().addNotification({
-        title: "Welcome to Startup Simulator",
-        message:
-          "Build your team, create a product, and grow your startup from nothing to a successful business!",
-        type: "info",
-      });
+      console.log("Game systems initialized");
+    } catch (error) {
+      console.error("Error initializing game systems:", error);
     }
-  }, [gameStarted, gameTick]);
+  }, [gameStarted]);
 
-  // Game tick effect (runs game loop)
+  // Set up and manage the game loop
   useEffect(() => {
-    let gameTickInterval;
+    if (!gameStarted) return;
 
-    if (gameStarted && gameSpeed > 0) {
-      const tickInterval = 1000 / gameSpeed; // Adjust frequency based on speed
+    // Update the target FPS based on game speed
+    targetFpsRef.current = gameSpeed;
 
-      gameTickInterval = setInterval(() => {
-        incrementTick();
-      }, tickInterval);
-    }
+    // Game loop function with frame rate control
+    const gameLoop = () => {
+      const now = Date.now();
+      const elapsed = now - lastTickTimeRef.current;
+      const targetFrameTime = 1000 / targetFpsRef.current;
 
-    // Cleanup on unmount
-    return () => {
-      if (gameTickInterval) clearInterval(gameTickInterval);
+      // Only process a tick if enough time has passed
+      if (elapsed >= targetFrameTime) {
+        lastTickTimeRef.current = now - (elapsed % targetFrameTime);
+
+        try {
+          // Process game tick
+          incrementTick();
+
+          // Check achievements periodically (not on every tick)
+          // This reduces the frequency of cross-store checks
+          if (Math.random() < 0.2) {
+            // 20% chance per tick
+            setTimeout(() => {
+              checkAchievements();
+            }, 50);
+          }
+        } catch (error) {
+          console.error("Error in game loop:", error);
+        }
+      }
+
+      // Schedule the next frame
+      timerRef.current = requestAnimationFrame(gameLoop);
     };
-  }, [gameStarted, gameSpeed, incrementTick]);
 
-  // No rendering, just initialization logic
+    // Start the game loop
+    timerRef.current = requestAnimationFrame(gameLoop);
+
+    // Cleanup function to cancel the animation frame
+    return () => {
+      if (timerRef.current) {
+        cancelAnimationFrame(timerRef.current);
+      }
+    };
+  }, [gameStarted, gameSpeed, incrementTick, checkAchievements]);
+
+  // No UI rendering needed
   return null;
 };
 

@@ -1,0 +1,23 @@
+// src/styles/themes/_light.scss
+
+// Light theme is the default defined in variables.scss
+// This file provides any light-theme specific overrides
+
+:root {
+  // Our default theme is light, so these are already set in variables
+  // This is mostly for explicit theme documentation and potential theme switching
+  --color-text-primary: #{$color-text-primary};
+  --color-text-secondary: #{$color-text-secondary};
+  --color-text-tertiary: #{$color-text-tertiary};
+  --color-background-primary: #{$color-background-primary};
+  --color-background-secondary: #{$color-background-secondary};
+  --color-border: #{$color-border};
+
+  // Game specific theming
+  --color-office-bg: #{$office-tier1-bg};
+  --color-primary-rgb: #{hex-to-rgb($color-primary)};
+}
+
+body.light-theme {
+  // Will be used when theme toggling is implemented
+}

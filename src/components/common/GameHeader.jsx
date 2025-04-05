@@ -1,38 +1,46 @@
 // src/components/common/GameHeader.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./GameHeader.module.scss";
-import useGameStore from "../../store/gameStore";
+import { useGameStore } from "../../store";
+import {
+  Rocket,
+  DollarSign,
+  Clock,
+  PlayCircle,
+  PauseCircle,
+  Save,
+  Moon,
+  Sun,
+  Settings,
+  Menu,
+} from "lucide-react";
 
 const GameHeader = ({ toggleTheme, theme }) => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
-  const [currentTime, setCurrentTime] = useState("");
   const [showSettings, setShowSettings] = useState(false);
 
-  // Get game state
+  // Get game state using proper selector pattern
   const companyName = useGameStore((state) => state.companyName);
   const cash = useGameStore((state) => state.cash);
   const startupIdea = useGameStore((state) => state.startupIdea);
-  const gameTick = useGameStore((state) => state.gameTick);
+  const gameTime = useGameStore((state) => state.gameTime);
   const gameSpeed = useGameStore((state) => state.gameSpeed);
+
+  // Get actions
   const setGameSpeed = useGameStore((state) => state.setGameSpeed);
   const saveGame = useGameStore((state) => state.saveGame);
 
-  // Calculate game time (each tick = 1 minute)
-  useEffect(() => {
-    const gameMinutes = gameTick;
-    const gameHours = Math.floor(gameMinutes / 60) % 24;
-    const gameDays = Math.floor(gameMinutes / (60 * 24)) + 1;
+  // Format the game time display
+  const formattedTime = useMemo(() => {
+    if (!gameTime) return "Day 1 - 00:00";
 
-    setCurrentTime(
-      `Day ${gameDays} - ${gameHours.toString().padStart(2, "0")}:${(
-        gameMinutes % 60
-      )
-        .toString()
-        .padStart(2, "0")}`
-    );
-  }, [gameTick]);
+    const { day, hour, minute } = gameTime;
+    return `Day ${day} - ${hour.toString().padStart(2, "0")}:${minute
+      .toString()
+      .padStart(2, "0")}`;
+  }, [gameTime]);
 
   // Handle manual save
   const handleSave = () => {
@@ -47,12 +55,15 @@ const GameHeader = ({ toggleTheme, theme }) => {
   };
 
   // Game speed options
-  const speedOptions = [
-    { value: 0.5, label: "0.5x" },
-    { value: 1, label: "1x" },
-    { value: 2, label: "2x" },
-    { value: 4, label: "4x" },
-  ];
+  const speedOptions = useMemo(
+    () => [
+      { value: 0.5, label: "0.5x" },
+      { value: 1, label: "1x" },
+      { value: 2, label: "2x" },
+      { value: 4, label: "4x" },
+    ],
+    []
+  );
 
   return (
     <header className={styles.header}>
@@ -60,7 +71,9 @@ const GameHeader = ({ toggleTheme, theme }) => {
         className={styles.logoSection}
         onClick={() => navigate("/dashboard")}
       >
-        <div className={styles.logo}>🚀</div>
+        <div className={styles.logo}>
+          <Rocket size={24} />
+        </div>
         <div className={styles.companyInfo}>
           <h1 className={styles.companyName}>{companyName}</h1>
           <span className={styles.productName}>{startupIdea?.name}</span>
@@ -69,21 +82,30 @@ const GameHeader = ({ toggleTheme, theme }) => {
 
       <div className={styles.statsSection}>
         <div className={styles.statItem}>
-          <span className={styles.statIcon}>💰</span>
+          <span className={styles.statIcon}>
+            <DollarSign size={18} />
+          </span>
           <span className={styles.statValue}>${formatNumber(cash)}</span>
         </div>
 
         <div className={styles.statItem}>
-          <span className={styles.statIcon}>🕒</span>
-          <span className={styles.statValue}>{currentTime}</span>
+          <span className={styles.statIcon}>
+            <Clock size={18} />
+          </span>
+          <span className={styles.statValue}>{formattedTime}</span>
         </div>
 
         <div className={styles.speedControls}>
           <button
             className={styles.speedButton}
             onClick={() => setGameSpeed(gameSpeed === 0 ? 1 : 0)}
+            aria-label={gameSpeed === 0 ? "Resume game" : "Pause game"}
           >
-            {gameSpeed === 0 ? "▶️" : "⏸️"}
+            {gameSpeed === 0 ? (
+              <PlayCircle size={18} />
+            ) : (
+              <PauseCircle size={18} />
+            )}
           </button>
 
           <div className={styles.speedSelector}>
@@ -108,8 +130,9 @@ const GameHeader = ({ toggleTheme, theme }) => {
           className={styles.iconButton}
           onClick={handleSave}
           title="Save Game"
+          aria-label="Save game"
         >
-          💾
+          <Save size={18} />
         </button>
 
         <button
@@ -118,24 +141,29 @@ const GameHeader = ({ toggleTheme, theme }) => {
           title={
             theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"
           }
+          aria-label={
+            theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"
+          }
         >
-          {theme === "light" ? "🌙" : "☀️"}
+          {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
         </button>
 
         <button
           className={styles.iconButton}
           onClick={() => setShowSettings(!showSettings)}
           title="Settings"
+          aria-label="Open settings"
         >
-          ⚙️
+          <Settings size={18} />
         </button>
 
         <button
           className={styles.iconButton}
           onClick={() => setShowMenu(!showMenu)}
           title="Menu"
+          aria-label="Open menu"
         >
-          ☰
+          <Menu size={18} />
         </button>
       </div>
 

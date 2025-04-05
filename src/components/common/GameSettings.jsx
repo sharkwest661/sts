@@ -1,39 +1,53 @@
 // src/components/common/GameSettings.jsx
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import styles from "./GameSettings.module.scss";
 import { useGameStore } from "../../store";
+import {
+  Clock,
+  ChevronUp,
+  ChevronDown,
+  Save,
+  RefreshCw,
+  Building,
+  DollarSign,
+} from "lucide-react";
 
 const GameSettings = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Get game state
+  // Use proper selector pattern for Zustand
   const gameSpeed = useGameStore((state) => state.gameSpeed);
-  const setGameSpeed = useGameStore((state) => state.setGameSpeed);
+  const gameTime = useGameStore((state) => state.gameTime);
   const cash = useGameStore((state) => state.cash);
   const companyName = useGameStore((state) => state.companyName);
+
+  // Get actions
+  const setGameSpeed = useGameStore((state) => state.setGameSpeed);
   const saveGame = useGameStore((state) => state.saveGame);
   const resetGame = useGameStore((state) => state.resetGame);
 
-  // Get game time
-  const gameTime = useGameStore((state) => state.gameTime);
-
   // Format game time for display
-  const formatGameTime = () => {
+  const formattedGameTime = useMemo(() => {
+    if (!gameTime) return "Day 1 - 00:00";
+
     const day = gameTime.day;
     const hour = gameTime.hour.toString().padStart(2, "0");
     const minute = gameTime.minute.toString().padStart(2, "0");
 
     return `Day ${day} - ${hour}:${minute}`;
-  };
+  }, [gameTime]);
 
   // Speed options
-  const speedOptions = [
-    { value: 0, label: "Pause" },
-    { value: 0.5, label: "0.5x" },
-    { value: 1, label: "1x" },
-    { value: 2, label: "2x" },
-    { value: 4, label: "4x" },
-  ];
+  const speedOptions = useMemo(
+    () => [
+      { value: 0, label: "Pause" },
+      { value: 0.5, label: "0.5x" },
+      { value: 1, label: "1x" },
+      { value: 2, label: "2x" },
+      { value: 4, label: "4x" },
+    ],
+    []
+  );
 
   // Handle save game
   const handleSave = () => {
@@ -61,9 +75,11 @@ const GameSettings = () => {
         className={styles.gameTimeDisplay}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className={styles.timeIcon}>🕒</div>
+        <div className={styles.timeIcon}>
+          <Clock size={18} />
+        </div>
         <div className={styles.timeInfo}>
-          <span className={styles.timeValue}>{formatGameTime()}</span>
+          <span className={styles.timeValue}>{formattedGameTime}</span>
           <div className={styles.speedControls}>
             <div className={styles.currentSpeed}>
               <span className={styles.speedLabel}>Speed:</span>
@@ -73,7 +89,9 @@ const GameSettings = () => {
             </div>
           </div>
         </div>
-        <div className={styles.toggleIcon}>{isOpen ? "▲" : "▼"}</div>
+        <div className={styles.toggleIcon}>
+          {isOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+        </div>
       </div>
 
       {/* Settings panel */}
@@ -100,32 +118,38 @@ const GameSettings = () => {
             <h3 className={styles.settingsTitle}>Game Info</h3>
             <div className={styles.gameInfo}>
               <div className={styles.infoItem}>
-                <span className={styles.infoLabel}>Company:</span>
+                <span className={styles.infoLabel}>
+                  <Building size={14} /> Company:
+                </span>
                 <span className={styles.infoValue}>{companyName}</span>
               </div>
               <div className={styles.infoItem}>
-                <span className={styles.infoLabel}>Cash:</span>
+                <span className={styles.infoLabel}>
+                  <DollarSign size={14} /> Cash:
+                </span>
                 <span className={styles.infoValue}>
                   ${cash.toLocaleString()}
                 </span>
               </div>
               <div className={styles.infoItem}>
-                <span className={styles.infoLabel}>Game Time:</span>
-                <span className={styles.infoValue}>{formatGameTime()}</span>
+                <span className={styles.infoLabel}>
+                  <Clock size={14} /> Game Time:
+                </span>
+                <span className={styles.infoValue}>{formattedGameTime}</span>
               </div>
             </div>
           </div>
 
           <div className={styles.settingsActions}>
             <button className={styles.actionButton} onClick={handleSave}>
-              💾 Save Game
+              <Save size={14} /> Save Game
             </button>
 
             <button
               className={`${styles.actionButton} ${styles.warningButton}`}
               onClick={handleResetGame}
             >
-              🔄 Reset Game
+              <RefreshCw size={14} /> Reset Game
             </button>
           </div>
         </div>

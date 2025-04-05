@@ -1,4 +1,4 @@
-// src/store/gameStore.js (Enhanced Version)
+// src/store/gameStore.js (Fixed Version)
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -16,6 +16,7 @@ const useGameStore = create(
         hour: 9,
         minute: 0,
       },
+      isProcessingTick: false, // Add guard flag to prevent recursive updates
 
       // Company data
       companyName: "",
@@ -76,6 +77,12 @@ const useGameStore = create(
       incrementTick: () => {
         const state = get();
 
+        // Guard against recursive updates - return early if already processing a tick
+        if (state.isProcessingTick) return;
+
+        // Set processing flag
+        set({ isProcessingTick: true });
+
         // Update game tick
         set({
           gameTick: state.gameTick + 1,
@@ -97,9 +104,6 @@ const useGameStore = create(
         if (newHour >= 24) {
           newDay += Math.floor(newHour / 24);
           newHour = newHour % 24;
-
-          // Process daily updates
-          get().processDailyUpdate();
         }
 
         set({
@@ -117,29 +121,48 @@ const useGameStore = create(
           });
         }
 
-        // Call other store ticks if needed
-        // These would be imported at the top in a full implementation
-        // Here we're using the window object as a workaround
-        if (window) {
-          // Access other stores through window after they're initialized
+        // IMPORTANT: Check if a day has passed after we've updated the time, not during the update
+        if (newHour === 0 && newMinute === 0) {
+          // Process in the next event loop to avoid nested state updates
           setTimeout(() => {
-            const productStore = window.productStore;
-            const marketingStore = window.marketingStore;
-            const investorStore = window.investorStore;
-
-            if (productStore) {
-              productStore.processDevTick();
-            }
-
-            if (marketingStore) {
-              marketingStore.processCampaigns();
-            }
-
-            if (investorStore) {
-              investorStore.processInvestors();
-            }
-          }, 100);
+            get().processDailyUpdate();
+          }, 0);
         }
+
+        // Call other store ticks after a delay to prevent tight update loops
+        // Use separate timeouts with different delays to stagger updates
+        setTimeout(() => {
+          try {
+            if (window.productStore) {
+              window.productStore.getState().processDevTick();
+            }
+          } catch (e) {
+            console.error("Error processing product tick", e);
+          }
+
+          // Release the processing flag after all subsystems have been updated
+          set({ isProcessingTick: false });
+        }, 50);
+
+        setTimeout(() => {
+          try {
+            if (window.marketingStore) {
+              window.marketingStore.getState().processCampaigns();
+            }
+          } catch (e) {
+            console.error("Error processing marketing campaigns", e);
+          }
+        }, 100);
+
+        setTimeout(() => {
+          try {
+            if (window.investorStore) {
+              window.investorStore.getState().processInvestors();
+            }
+          } catch (e) {
+            console.error("Error processing investors", e);
+          }
+        }, 150);
       },
 
       // Process daily update
@@ -154,16 +177,23 @@ const useGameStore = create(
 
         // Monthly update (every 30 days)
         if (get().gameTime.day % 30 === 0) {
-          get().processMonthlyUpdate();
+          // Use setTimeout to avoid nested state updates
+          setTimeout(() => {
+            get().processMonthlyUpdate();
+          }, 0);
         }
 
         // Random events (2% chance per day)
         if (Math.random() < 0.02) {
-          get().generateRandomEvent();
+          setTimeout(() => {
+            get().generateRandomEvent();
+          }, 0);
         }
 
         // Check objectives
-        get().checkObjectives();
+        setTimeout(() => {
+          get().checkObjectives();
+        }, 0);
       },
 
       // Process monthly update
@@ -274,6 +304,8 @@ const useGameStore = create(
           const teamStore = window.teamStore;
           if (teamStore) {
             const teamStats = teamStore.getState().getTeamStats();
+
+            // Use a single state update to minimize renders
             set((state) => ({
               teamSize: teamStats.headcount || 0,
               expenses: teamStats.totalSalary + state.officeExpenses,
@@ -530,6 +562,7 @@ const useGameStore = create(
           notifications: [],
           achievements: [],
           objectives: [],
+          isProcessingTick: false,
         });
       },
 

@@ -1,6 +1,16 @@
 // src/components/dashboard/widgets/MetricsWidget.jsx
 import React from "react";
 import styles from "./MetricsWidget.module.scss";
+import {
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  CreditCard,
+  Clock,
+  Award,
+  Users,
+  ThumbsUp,
+} from "lucide-react";
 
 const MetricsWidget = ({
   cash,
@@ -11,142 +21,121 @@ const MetricsWidget = ({
   monthsLabel,
   reputation,
 }) => {
-  // Format large numbers with commas
-  const formatNumber = (num) => {
-    return num.toLocaleString("en-US", { maximumFractionDigits: 0 });
+  // Format currency
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      notation: amount >= 1000000 ? "compact" : "standard",
+      maximumFractionDigits: amount >= 1000000 ? 1 : 0,
+    }).format(amount);
   };
 
-  // Determine if profitable
+  // Check if profit or loss
   const isProfitable = monthlyProfitLoss >= 0;
 
   return (
     <div className={styles.metricsWidget}>
-      <h3 className={styles.widgetTitle}>Business Metrics</h3>
+      <div className={styles.widgetHeader}>
+        <h2 className={styles.widgetTitle}>
+          <TrendingUp size={18} className={styles.titleIcon} />
+          Key Metrics
+        </h2>
+      </div>
 
       <div className={styles.metricsGrid}>
-        <div className={styles.metricItem}>
-          <span className={styles.metricIcon}>💰</span>
+        <div className={styles.metricCard}>
+          <div className={styles.metricIcon}>
+            <DollarSign size={18} />
+          </div>
           <div className={styles.metricContent}>
-            <span className={styles.metricLabel}>Cash</span>
-            <span className={styles.metricValue}>${formatNumber(cash)}</span>
+            <h3 className={styles.metricTitle}>Cash Balance</h3>
+            <p className={styles.metricValue}>{formatCurrency(cash)}</p>
           </div>
         </div>
 
-        <div className={styles.metricItem}>
-          <span className={styles.metricIcon}>📈</span>
-          <div className={styles.metricContent}>
-            <span className={styles.metricLabel}>Revenue</span>
-            <span className={styles.metricValue}>
-              ${formatNumber(revenue)}/mo
-            </span>
+        <div className={styles.metricCard}>
+          <div className={styles.metricIcon}>
+            <CreditCard size={18} />
           </div>
-        </div>
-
-        <div className={styles.metricItem}>
-          <span className={styles.metricIcon}>📉</span>
           <div className={styles.metricContent}>
-            <span className={styles.metricLabel}>Expenses</span>
-            <span className={styles.metricValue}>
-              ${formatNumber(expenses)}/mo
-            </span>
-          </div>
-        </div>
-
-        <div className={styles.metricItem}>
-          <span className={styles.metricIcon}>⏱️</span>
-          <div className={styles.metricContent}>
-            <span className={styles.metricLabel}>Runway</span>
-            <span className={styles.metricValue}>
-              {burnRate} {monthsLabel}
-            </span>
-          </div>
-        </div>
-
-        <div className={styles.metricItem}>
-          <span className={styles.metricIcon}>
-            {isProfitable ? "✅" : "⚠️"}
-          </span>
-          <div className={styles.metricContent}>
-            <span className={styles.metricLabel}>
-              {isProfitable ? "Profit" : "Loss"}
-            </span>
-            <span
+            <h3 className={styles.metricTitle}>
+              Monthly {isProfitable ? "Profit" : "Loss"}
+            </h3>
+            <p
               className={`${styles.metricValue} ${
                 isProfitable ? styles.positive : styles.negative
               }`}
             >
               {isProfitable ? "+" : ""}
-              {formatNumber(monthlyProfitLoss)}/mo
-            </span>
+              {formatCurrency(monthlyProfitLoss)}
+            </p>
           </div>
         </div>
-      </div>
 
-      <div className={styles.reputationSection}>
-        <h4 className={styles.sectionTitle}>Reputation</h4>
-        <div className={styles.reputationGrid}>
-          <div className={styles.reputationItem}>
-            <span className={styles.reputationLabel}>Industry</span>
-            <div className={styles.reputationBarContainer}>
+        <div className={styles.metricCard}>
+          <div className={styles.metricIcon}>
+            <Clock size={18} />
+          </div>
+          <div className={styles.metricContent}>
+            <h3 className={styles.metricTitle}>Runway</h3>
+            <p className={styles.metricValue}>
+              {burnRate}{" "}
+              <span className={styles.metricUnit}>{monthsLabel}</span>
+            </p>
+          </div>
+        </div>
+
+        <div className={styles.metricCard}>
+          <div className={styles.metricIcon}>
+            <Award size={18} />
+          </div>
+          <div className={styles.metricContent}>
+            <h3 className={styles.metricTitle}>Industry Rep</h3>
+            <div className={styles.reputationBar}>
               <div
-                className={styles.reputationBar}
+                className={styles.reputationFill}
                 style={{ width: `${reputation.industry}%` }}
               ></div>
             </div>
-            <span className={styles.reputationValue}>
-              {reputation.industry}%
-            </span>
+            <p className={styles.metricSmallValue}>{reputation.industry}/100</p>
           </div>
+        </div>
 
-          <div className={styles.reputationItem}>
-            <span className={styles.reputationLabel}>Employer</span>
-            <div className={styles.reputationBarContainer}>
+        <div className={styles.metricCard}>
+          <div className={styles.metricIcon}>
+            <Users size={18} />
+          </div>
+          <div className={styles.metricContent}>
+            <h3 className={styles.metricTitle}>Employer Rep</h3>
+            <div className={styles.reputationBar}>
               <div
-                className={styles.reputationBar}
+                className={styles.reputationFill}
                 style={{ width: `${reputation.employer}%` }}
               ></div>
             </div>
-            <span className={styles.reputationValue}>
-              {reputation.employer}%
-            </span>
+            <p className={styles.metricSmallValue}>{reputation.employer}/100</p>
           </div>
+        </div>
 
-          <div className={styles.reputationItem}>
-            <span className={styles.reputationLabel}>Customer</span>
-            <div className={styles.reputationBarContainer}>
+        <div className={styles.metricCard}>
+          <div className={styles.metricIcon}>
+            <ThumbsUp size={18} />
+          </div>
+          <div className={styles.metricContent}>
+            <h3 className={styles.metricTitle}>Customer Rep</h3>
+            <div className={styles.reputationBar}>
               <div
-                className={styles.reputationBar}
+                className={styles.reputationFill}
                 style={{ width: `${reputation.customer}%` }}
               ></div>
             </div>
-            <span className={styles.reputationValue}>
-              {reputation.customer}%
-            </span>
+            <p className={styles.metricSmallValue}>{reputation.customer}/100</p>
           </div>
         </div>
-      </div>
-
-      <div className={styles.burnRateIndicator}>
-        <span className={styles.burnRateLabel}>Burn Rate:</span>
-        <div className={styles.burnRateTrack}>
-          <div
-            className={`${styles.burnRateFill} ${
-              isProfitable ? styles.profitable : ""
-            }`}
-            style={{
-              width: `${Math.min(
-                100,
-                Math.max(0, (expenses / (revenue || 1)) * 100)
-              )}%`,
-            }}
-          ></div>
-        </div>
-        <span className={styles.burnRateValue}>
-          {formatNumber(expenses)}/${formatNumber(revenue)}
-        </span>
       </div>
     </div>
   );
 };
 
-export default MetricsWidget;
+export default React.memo(MetricsWidget);
