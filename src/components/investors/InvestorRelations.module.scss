@@ -1,0 +1,507 @@
+// src/components/investors/InvestorRelations.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.investorRelations {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.investorHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+
+  h2 {
+    font-size: $font-size-2xl;
+    margin: 0;
+    color: var(--color-text-primary);
+  }
+}
+
+.companyValuation {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  .valuationLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+    margin-bottom: 2px;
+  }
+
+  .valuationAmount {
+    font-size: $font-size-xl;
+    font-weight: 700;
+    color: var(--color-primary);
+    font-family: $font-family-secondary;
+  }
+}
+
+.financialSnapshot {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--color-background-secondary);
+  padding: $spacing-md;
+  border-radius: 8px;
+  margin-bottom: $spacing-lg;
+}
+
+.snapshotItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .snapshotLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+    margin-bottom: 4px;
+    text-align: center;
+  }
+
+  .snapshotValue {
+    font-size: $font-size-md;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-family: $font-family-secondary;
+
+    &.profit {
+      color: var(--color-success);
+    }
+
+    &.loss {
+      color: var(--color-error);
+    }
+  }
+}
+
+.tabsContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: $spacing-md;
+}
+
+.tab {
+  padding: $spacing-sm $spacing-lg;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color $transition-fast, border-color $transition-fast;
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+
+  &.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+}
+
+.tabContent {
+  flex: 1;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-background-secondary);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--color-primary-rgb), 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background-color: rgba(var(--color-primary-rgb), 0.5);
+    }
+  }
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+  padding-bottom: $spacing-xs;
+  border-bottom: 1px dashed var(--color-border);
+
+  h3 {
+    font-size: $font-size-lg;
+    margin: 0;
+    color: var(--color-text-primary);
+  }
+}
+
+.findButton {
+  padding: $spacing-xs $spacing-md;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color $transition-fast, transform $transition-fast;
+
+  &:hover {
+    background-color: darken(#4a90e2, 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.emptyState {
+  padding: $spacing-xl;
+  text-align: center;
+  color: var(--color-text-secondary);
+  background-color: var(--color-background-secondary);
+  border-radius: 8px;
+
+  p {
+    margin: 0;
+    font-size: $font-size-md;
+  }
+}
+
+.investorsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: $spacing-md;
+  margin-bottom: $spacing-xl;
+}
+
+.investorCard {
+  background-color: var(--color-background-primary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: $spacing-md;
+  transition: transform $transition-fast, box-shadow $transition-fast;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.investorHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-sm;
+}
+
+.investorName {
+  font-size: $font-size-md;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.investorType {
+  font-size: $font-size-xs;
+  color: white;
+  background-color: var(--color-primary);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.investmentDetails,
+.potentialDetails {
+  display: flex;
+  margin-bottom: $spacing-md;
+}
+
+.detailItem {
+  flex: 1;
+
+  .detailLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+    margin-bottom: 2px;
+    display: block;
+  }
+
+  .detailValue {
+    font-size: $font-size-md;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-family: $font-family-secondary;
+  }
+}
+
+.relationshipSection,
+.interestSection {
+  margin-bottom: $spacing-md;
+}
+
+.relationshipHeader,
+.interestHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.relationshipLabel,
+.interestLabel,
+.expectationsLabel,
+.focusLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+}
+
+.relationshipValue,
+.interestValue {
+  font-size: $font-size-xs;
+  font-weight: 600;
+
+  &.excellent {
+    color: var(--color-success);
+  }
+
+  &.good {
+    color: var(--color-primary);
+  }
+
+  &.fair {
+    color: var(--color-warning);
+  }
+
+  &.poor {
+    color: var(--color-error);
+  }
+}
+
+.relationshipBarContainer,
+.interestBarContainer {
+  height: 6px;
+  background-color: var(--color-background-secondary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.relationshipBar,
+.interestBar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width $transition-normal;
+
+  &.excellent {
+    background-color: var(--color-success);
+  }
+
+  &.good {
+    background-color: var(--color-primary);
+  }
+
+  &.fair {
+    background-color: var(--color-warning);
+  }
+
+  &.poor {
+    background-color: var(--color-error);
+  }
+}
+
+.expectationsSection,
+.focusSection {
+  margin-bottom: $spacing-md;
+}
+
+.expectationsText,
+.focusText {
+  margin: $spacing-xs 0 0 0;
+  font-size: $font-size-sm;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.investorActions {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.actionButton {
+  flex: 1;
+  padding: $spacing-sm;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: background-color $transition-fast, color $transition-fast;
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+}
+
+// Timeline styles
+.timelineHeader {
+  margin-bottom: $spacing-md;
+
+  h3 {
+    font-size: $font-size-lg;
+    margin: 0;
+    color: var(--color-text-primary);
+  }
+}
+
+.timeline {
+  position: relative;
+  padding-left: 32px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 8px;
+    width: 2px;
+    background-color: var(--color-border);
+  }
+}
+
+.timelineEvent {
+  position: relative;
+  margin-bottom: $spacing-lg;
+
+  &.investment .timelineDot {
+    background-color: var(--color-success);
+  }
+
+  &.meeting .timelineDot {
+    background-color: var(--color-primary);
+  }
+
+  &.interest .timelineDot {
+    background-color: var(--color-warning);
+  }
+}
+
+.timelineDot {
+  position: absolute;
+  left: -32px;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-background-primary);
+  z-index: 1;
+}
+
+.timelineContent {
+  background-color: var(--color-background-secondary);
+  border-radius: 8px;
+  padding: $spacing-sm $spacing-md;
+}
+
+.timelineDate {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  margin-bottom: 2px;
+  display: block;
+}
+
+.timelineText {
+  margin: 0;
+  font-size: $font-size-sm;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-lg) {
+  .investorHeader {
+    flex-direction: column;
+    align-items: flex-start;
+
+    h2 {
+      margin-bottom: $spacing-sm;
+    }
+
+    .companyValuation {
+      align-items: flex-start;
+    }
+  }
+
+  .financialSnapshot {
+    flex-wrap: wrap;
+
+    .snapshotItem {
+      width: 50%;
+      margin-bottom: $spacing-sm;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .investorsList {
+    grid-template-columns: 1fr;
+  }
+
+  .investmentDetails,
+  .potentialDetails {
+    flex-direction: column;
+
+    .detailItem {
+      margin-bottom: $spacing-sm;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(var(--color-primary-rgb), 0.3);
+      border-radius: 2px;
+    }
+  }
+
+  .tab {
+    padding: $spacing-sm;
+  }
+
+  .financialSnapshot {
+    .snapshotItem {
+      width: 100%;
+    }
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+
+    h3 {
+      margin-bottom: $spacing-sm;
+    }
+  }
+}

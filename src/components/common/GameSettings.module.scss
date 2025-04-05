@@ -1,0 +1,183 @@
+// src/components/common/GameSettings.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.settingsContainer {
+  position: relative;
+  margin-right: $spacing-md;
+}
+
+.gameTimeDisplay {
+  display: flex;
+  align-items: center;
+  background-color: var(--color-background-secondary);
+  border-radius: 8px;
+  padding: $spacing-xs $spacing-sm;
+  cursor: pointer;
+  transition: background-color $transition-fast;
+
+  &:hover {
+    background-color: rgba(var(--color-primary-rgb), 0.1);
+  }
+
+  .timeIcon {
+    font-size: 18px;
+    margin-right: $spacing-xs;
+  }
+
+  .timeInfo {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .timeValue {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-family: $font-family-secondary;
+  }
+
+  .speedControls {
+    display: flex;
+    align-items: center;
+  }
+
+  .currentSpeed {
+    display: flex;
+    align-items: center;
+    font-size: $font-size-xs;
+
+    .speedLabel {
+      color: var(--color-text-secondary);
+      margin-right: 4px;
+    }
+
+    .speedValue {
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+  }
+
+  .toggleIcon {
+    margin-left: $spacing-sm;
+    font-size: 10px;
+    color: var(--color-text-tertiary);
+  }
+}
+
+.settingsPanel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: $spacing-xs;
+  width: 300px;
+  background-color: var(--color-background-primary);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: $z-index-dropdown;
+  animation: slideDown 0.2s ease-out;
+  overflow: hidden;
+
+  .settingsGroup {
+    padding: $spacing-md;
+    border-bottom: 1px solid var(--color-border);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .settingsTitle {
+    font-size: $font-size-sm;
+    margin: 0 0 $spacing-sm 0;
+    color: var(--color-text-primary);
+  }
+}
+
+.speedButtons {
+  display: flex;
+  gap: $spacing-xs;
+
+  .speedButton {
+    flex: 1;
+    padding: $spacing-xs;
+    background-color: var(--color-background-secondary);
+    border: none;
+    border-radius: 4px;
+    font-size: $font-size-xs;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    &:hover:not(.active) {
+      background-color: rgba(var(--color-primary-rgb), 0.1);
+    }
+
+    &.active {
+      background-color: var(--color-primary);
+      color: white;
+    }
+  }
+}
+
+.gameInfo {
+  .infoItem {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: $spacing-xs;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .infoLabel {
+      font-size: $font-size-xs;
+      color: var(--color-text-secondary);
+    }
+
+    .infoValue {
+      font-size: $font-size-xs;
+      color: var(--color-text-primary);
+      font-weight: 500;
+    }
+  }
+}
+
+.settingsActions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  padding: $spacing-md;
+
+  .actionButton {
+    padding: $spacing-sm;
+    background-color: var(--color-background-secondary);
+    border: none;
+    border-radius: 4px;
+    font-size: $font-size-sm;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    &:hover {
+      background-color: var(--color-primary);
+      color: white;
+    }
+
+    &.warningButton:hover {
+      background-color: var(--color-error);
+    }
+  }
+}
+
+// Animations
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

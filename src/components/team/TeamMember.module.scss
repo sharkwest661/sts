@@ -1,0 +1,225 @@
+// src/components/team/TeamMember.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.teamMember {
+  display: flex;
+  padding: $spacing-md;
+  border-radius: 8px;
+  background-color: var(--color-background-primary);
+  transition: transform $transition-fast, box-shadow $transition-fast;
+
+  &.highlighted {
+    box-shadow: 0 0 0 2px var(--color-primary);
+  }
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-md;
+  font-weight: 600;
+  color: white;
+  margin-right: $spacing-md;
+  flex-shrink: 0;
+}
+
+.memberInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.nameRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: $spacing-xs;
+}
+
+.memberName {
+  margin: 0;
+  font-size: $font-size-md;
+  color: var(--color-text-primary);
+}
+
+.memberSpecialty {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  background-color: rgba(var(--color-primary-rgb), 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.infoRow {
+  display: flex;
+  margin-bottom: $spacing-sm;
+  gap: $spacing-md;
+}
+
+.statusItem {
+  flex: 1;
+}
+
+.statusLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.statusBarContainer {
+  height: 4px;
+  background-color: var(--color-background-secondary);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.statusBar {
+  height: 100%;
+  border-radius: 2px;
+  transition: width $transition-normal;
+
+  &.excellent {
+    background-color: var(--color-success);
+  }
+
+  &.good {
+    background-color: var(--color-primary);
+  }
+
+  &.fair {
+    background-color: var(--color-warning);
+  }
+
+  &.poor {
+    background-color: var(--color-error);
+  }
+}
+
+.skillsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-xs $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.skillItem {
+  display: flex;
+  align-items: center;
+}
+
+.skillLabel {
+  width: 70px;
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  text-transform: capitalize;
+}
+
+.skillBarContainer {
+  flex: 1;
+  height: 4px;
+  background-color: var(--color-background-secondary);
+  border-radius: 2px;
+  margin: 0 $spacing-xs;
+  overflow: hidden;
+}
+
+.skillBar {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 2px;
+}
+
+.skillValue {
+  font-size: $font-size-xs;
+  color: var(--color-text-primary);
+  font-family: $font-family-secondary;
+  min-width: 20px;
+  text-align: right;
+}
+
+.memberDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-sm $spacing-md;
+  padding-top: $spacing-sm;
+  border-top: 1px dashed var(--color-border);
+}
+
+.detailItem {
+  min-width: 120px;
+}
+
+.detailLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  margin-bottom: 2px;
+  display: block;
+}
+
+.detailValue {
+  font-size: $font-size-sm;
+  color: var(--color-text-primary);
+}
+
+.personalityTraits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  margin-top: 2px;
+}
+
+.personalityTrait {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  background-color: var(--color-background-secondary);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+}
+
+.bestSkill {
+  text-transform: capitalize;
+}
+
+.salaryInfo {
+  font-family: $font-family-secondary;
+  font-weight: 500;
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-md) {
+  .skillsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .memberDetails {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .nameRow {
+    flex-direction: column;
+
+    .memberSpecialty {
+      margin-top: $spacing-xs;
+    }
+  }
+
+  .infoRow {
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+}

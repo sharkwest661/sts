@@ -1,0 +1,391 @@
+// src/components/team/TeamManagement.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.teamManagement {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.teamHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid var(--color-border);
+
+  h2 {
+    font-size: $font-size-2xl;
+    margin: 0;
+    color: var(--color-text-primary);
+  }
+}
+
+.teamStats {
+  display: flex;
+  gap: $spacing-lg;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  .statLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+    margin-bottom: 2px;
+  }
+
+  .statValue {
+    font-size: $font-size-md;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-family: $font-family-secondary;
+  }
+}
+
+.tabsContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: $spacing-md;
+}
+
+.tab {
+  padding: $spacing-sm $spacing-lg;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color $transition-fast, border-color $transition-fast;
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+
+  &.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+}
+
+.tabContent {
+  flex: 1;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-background-secondary);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--color-primary-rgb), 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background-color: rgba(var(--color-primary-rgb), 0.5);
+    }
+  }
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl;
+  text-align: center;
+  color: var(--color-text-secondary);
+
+  p {
+    margin-bottom: $spacing-md;
+    font-size: $font-size-md;
+  }
+}
+
+.recruitButton,
+.refreshButton {
+  padding: $spacing-sm $spacing-lg;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color $transition-fast, transform $transition-fast;
+
+  &:hover {
+    background-color: darken(#4a90e2, 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// Team tab styles
+.teamGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: $spacing-md;
+}
+
+.teamMemberCard {
+  background-color: var(--color-background-primary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform $transition-fast, box-shadow $transition-fast;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.teamMemberActions {
+  display: flex;
+  padding: $spacing-sm;
+  border-top: 1px solid var(--color-border);
+}
+
+.actionButton {
+  flex: 1;
+  padding: $spacing-sm;
+  font-size: $font-size-sm;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color $transition-fast;
+
+  &:not(:last-child) {
+    margin-right: $spacing-sm;
+  }
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  &:first-child:hover {
+    background-color: var(--color-error);
+  }
+}
+
+// Recruit tab styles
+.recruitTab {
+  display: flex;
+  flex-direction: column;
+}
+
+.recruitHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+
+  h3 {
+    font-size: $font-size-lg;
+    margin: 0;
+    color: var(--color-text-primary);
+  }
+}
+
+.recruitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: $spacing-md;
+}
+
+.recruitCard {
+  background-color: var(--color-background-primary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform $transition-fast, box-shadow $transition-fast;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.recruitInfo {
+  padding: $spacing-md;
+  flex: 1;
+}
+
+.recruitName {
+  font-size: $font-size-md;
+  margin: 0 0 $spacing-xs 0;
+  color: var(--color-text-primary);
+}
+
+.recruitSpecialty {
+  display: inline-block;
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  background-color: rgba(var(--color-primary-rgb), 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-bottom: $spacing-sm;
+}
+
+.recruitSkills {
+  margin-bottom: $spacing-md;
+}
+
+.skillItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-xs;
+}
+
+.skillLabel {
+  width: 80px;
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  text-transform: capitalize;
+}
+
+.skillBarContainer {
+  flex: 1;
+  height: 6px;
+  background-color: var(--color-background-secondary);
+  border-radius: 3px;
+  margin: 0 $spacing-sm;
+  overflow: hidden;
+}
+
+.skillBar {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 3px;
+}
+
+.skillValue {
+  font-size: $font-size-xs;
+  color: var(--color-text-primary);
+  font-family: $font-family-secondary;
+  min-width: 25px;
+  text-align: right;
+}
+
+.recruitPersonality {
+  margin-bottom: $spacing-md;
+}
+
+.personalityLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  margin-right: $spacing-xs;
+}
+
+.personalityTraits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  margin-top: $spacing-xs;
+}
+
+.personalityTrait {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  background-color: var(--color-background-secondary);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.recruitSalary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: $spacing-sm;
+  border-top: 1px dashed var(--color-border);
+}
+
+.salaryLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+}
+
+.salaryValue {
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-family: $font-family-secondary;
+}
+
+.hireButton {
+  padding: $spacing-sm;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color $transition-fast;
+
+  &:hover:not(:disabled) {
+    background-color: darken(#4a90e2, 10%);
+  }
+
+  &:disabled {
+    background-color: var(--color-text-tertiary);
+    cursor: not-allowed;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-lg) {
+  .teamHeader {
+    flex-direction: column;
+    align-items: flex-start;
+
+    h2 {
+      margin-bottom: $spacing-sm;
+    }
+  }
+
+  .teamStats {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .teamGrid,
+  .recruitsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .recruitHeader {
+    flex-direction: column;
+    align-items: flex-start;
+
+    h3 {
+      margin-bottom: $spacing-sm;
+    }
+  }
+}

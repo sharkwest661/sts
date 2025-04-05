@@ -1,0 +1,488 @@
+// src/components/minigames/InvestorPitchGame.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.pitchGameContainer {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: var(--color-background-primary);
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: $spacing-md;
+  position: relative;
+  overflow: hidden;
+}
+
+.pitchHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+
+  .pitchTitle {
+    font-size: $font-size-lg;
+    margin: 0;
+    color: var(--color-text-primary);
+  }
+}
+
+.pitchStats {
+  display: flex;
+  gap: $spacing-md;
+
+  .timeLeft,
+  .cardsLeft {
+    display: flex;
+    align-items: center;
+  }
+
+  .statLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+    margin-right: $spacing-xs;
+  }
+
+  .statValue {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-family: $font-family-secondary;
+
+    &.warning {
+      color: var(--color-error);
+      animation: pulse 1s infinite;
+    }
+  }
+}
+
+.pitchInstructions {
+  font-size: $font-size-sm;
+  color: var(--color-text-secondary);
+  background-color: var(--color-background-secondary);
+  padding: $spacing-sm;
+  border-radius: 6px;
+  margin-bottom: $spacing-md;
+  line-height: 1.4;
+}
+
+.investorInterests {
+  margin-top: $spacing-sm;
+
+  .interestLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-primary);
+    font-weight: 500;
+    margin-bottom: $spacing-xs;
+    display: block;
+  }
+
+  .interestBars {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $spacing-xs;
+  }
+
+  .interestItem {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+  }
+
+  .interestCategory {
+    font-size: $font-size-xs;
+    padding: 2px 6px;
+    border-radius: 10px;
+    white-space: nowrap;
+
+    &.tech {
+      background-color: rgba(74, 144, 226, 0.2);
+      color: #4a90e2;
+    }
+
+    &.business {
+      background-color: rgba(80, 227, 194, 0.2);
+      color: #50e3c2;
+    }
+
+    &.innovation {
+      background-color: rgba(245, 166, 35, 0.2);
+      color: #f5a623;
+    }
+
+    &.metrics {
+      background-color: rgba(155, 89, 182, 0.2);
+      color: #9b59b6;
+    }
+  }
+
+  .interestBarContainer {
+    flex: 1;
+    height: 6px;
+    background-color: var(--color-background-primary);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .interestBar {
+    height: 100%;
+    background-color: var(--color-primary);
+    border-radius: 3px;
+    transition: width $transition-normal;
+  }
+}
+
+.gameArea {
+  display: flex;
+  height: 400px;
+  margin-bottom: $spacing-md;
+  position: relative;
+}
+
+.cardsArea {
+  flex: 2;
+  background-color: rgba(var(--color-background-secondary-rgb), 0.5);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.pitchDeckArea {
+  flex: 1;
+  background-color: var(--color-background-secondary);
+  border-radius: 8px;
+  margin-left: $spacing-md;
+  padding: $spacing-sm;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.pitchDeckTitle {
+  font-size: $font-size-sm;
+  margin: 0 0 $spacing-sm 0;
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+.pitchDeckCards {
+  flex: 1;
+  position: relative;
+}
+
+.buzzwordCard {
+  position: absolute;
+  width: 120px;
+  height: 70px;
+  background-color: white;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $spacing-xs;
+  text-align: center;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  user-select: none;
+  transform-origin: center center;
+  border: 2px solid transparent;
+
+  &.tech {
+    border-color: #4a90e2;
+    background-color: rgba(74, 144, 226, 0.1);
+  }
+
+  &.business {
+    border-color: #50e3c2;
+    background-color: rgba(80, 227, 194, 0.1);
+  }
+
+  &.innovation {
+    border-color: #f5a623;
+    background-color: rgba(245, 166, 35, 0.1);
+  }
+
+  &.metrics {
+    border-color: #9b59b6;
+    background-color: rgba(155, 89, 182, 0.1);
+  }
+
+  &.selected {
+    border-width: 3px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.pitchDeckCard {
+  position: absolute;
+  width: 120px;
+  height: 70px;
+  background-color: white;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $spacing-xs;
+  text-align: center;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  &.tech {
+    border: 2px solid #4a90e2;
+    background-color: rgba(74, 144, 226, 0.1);
+  }
+
+  &.business {
+    border: 2px solid #50e3c2;
+    background-color: rgba(80, 227, 194, 0.1);
+  }
+
+  &.innovation {
+    border: 2px solid #f5a623;
+    background-color: rgba(245, 166, 35, 0.1);
+  }
+
+  &.metrics {
+    border: 2px solid #9b59b6;
+    background-color: rgba(155, 89, 182, 0.1);
+  }
+}
+
+.pitchActions {
+  display: flex;
+  justify-content: space-between;
+  gap: $spacing-sm;
+}
+
+.addToPitchButton,
+.completePitchButton {
+  padding: $spacing-sm $spacing-md;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover:not(:disabled) {
+    background-color: darken(#4a90e2, 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    background-color: var(--color-text-tertiary);
+    cursor: not-allowed;
+  }
+}
+
+.cancelButton {
+  padding: $spacing-xs $spacing-md;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-error);
+    color: white;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.resultOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.resultContent {
+  background-color: var(--color-background-primary);
+  border-radius: 12px;
+  padding: $spacing-lg;
+  text-align: center;
+  max-width: 80%;
+  width: 400px;
+}
+
+.resultTitle {
+  font-size: $font-size-xl;
+  margin: 0 0 $spacing-md 0;
+  color: var(--color-text-primary);
+}
+
+.investorImage {
+  font-size: 64px;
+  margin-bottom: $spacing-md;
+}
+
+.scoreDisplay {
+  margin-bottom: $spacing-md;
+
+  .scoreLabel {
+    font-size: $font-size-sm;
+    color: var(--color-text-secondary);
+    margin-bottom: $spacing-xs;
+  }
+
+  .scoreValue {
+    font-size: $font-size-xl;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: $spacing-xs;
+    font-family: $font-family-secondary;
+  }
+
+  .scoreBarContainer {
+    height: 12px;
+    background-color: var(--color-background-secondary);
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 0 auto;
+    max-width: 300px;
+  }
+
+  .scoreBar {
+    height: 100%;
+    border-radius: 6px;
+    transition: width $transition-normal;
+
+    &.excellent {
+      background-color: var(--color-success);
+    }
+
+    &.good {
+      background-color: var(--color-primary);
+    }
+
+    &.fair {
+      background-color: var(--color-warning);
+    }
+
+    &.poor {
+      background-color: var(--color-error);
+    }
+  }
+}
+
+.resultDescription {
+  font-size: $font-size-sm;
+  color: var(--color-text-secondary);
+  margin-bottom: $spacing-lg;
+  line-height: 1.5;
+}
+
+.continueButton {
+  padding: $spacing-sm $spacing-lg;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-md;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    background-color: darken(#4a90e2, 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+// Animations
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-md) {
+  .gameArea {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .pitchDeckArea {
+    margin-left: 0;
+    margin-top: $spacing-md;
+    height: 200px;
+  }
+
+  .cardsArea {
+    height: 300px;
+  }
+
+  .investorInterests {
+    .interestBars {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .pitchHeader {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .pitchTitle {
+      margin-bottom: $spacing-xs;
+    }
+  }
+
+  .pitchActions {
+    flex-direction: column;
+  }
+
+  .buzzwordCard,
+  .pitchDeckCard {
+    width: 100px;
+    height: 60px;
+    font-size: $font-size-xs;
+  }
+}

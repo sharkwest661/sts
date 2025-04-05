@@ -1,0 +1,548 @@
+// src/components/product/ProductDevelopment.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.productDevelopment {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.productHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-lg;
+  padding-bottom: $spacing-md;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.productInfo {
+  display: flex;
+  align-items: center;
+}
+
+.productName {
+  font-size: $font-size-2xl;
+  margin: 0;
+  margin-right: $spacing-sm;
+  color: var(--color-text-primary);
+}
+
+.versionTag {
+  padding: $spacing-xs $spacing-sm;
+  background-color: var(--color-primary);
+  color: white;
+  border-radius: 12px;
+  font-size: $font-size-xs;
+  font-weight: 600;
+  font-family: $font-family-secondary;
+}
+
+.productStats {
+  display: flex;
+  gap: $spacing-lg;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .statValue {
+    font-size: $font-size-xl;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    font-family: $font-family-secondary;
+  }
+
+  .statLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+  }
+}
+
+.releaseInfo {
+  background-color: rgba(var(--color-primary-rgb), 0.1);
+  padding: $spacing-md;
+  border-radius: 8px;
+  margin-bottom: $spacing-lg;
+}
+
+.releaseTitle {
+  font-size: $font-size-lg;
+  margin: 0 0 $spacing-sm 0;
+  color: var(--color-text-primary);
+}
+
+.releaseDetails {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.releaseFeatures {
+  display: flex;
+  flex-direction: column;
+}
+
+.releaseLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  margin-bottom: $spacing-xs;
+}
+
+.featureTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+}
+
+.featureTag {
+  padding: $spacing-xs $spacing-sm;
+  background-color: rgba(var(--color-primary-rgb), 0.2);
+  color: var(--color-primary);
+  border-radius: 12px;
+  font-size: $font-size-xs;
+}
+
+.releaseEstimate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.estimateValue {
+  font-size: $font-size-md;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-family: $font-family-secondary;
+}
+
+.tabsContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: $spacing-md;
+}
+
+.tab {
+  padding: $spacing-sm $spacing-lg;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color $transition-fast, border-color $transition-fast;
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+
+  &.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+}
+
+.tabContent {
+  flex: 1;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-background-secondary);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--color-primary-rgb), 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background-color: rgba(var(--color-primary-rgb), 0.5);
+    }
+  }
+}
+
+// Features tab styles
+.featuresHeader,
+.bugsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+
+  h3 {
+    font-size: $font-size-lg;
+    margin: 0;
+    color: var(--color-text-primary);
+  }
+}
+
+.addButton {
+  padding: $spacing-xs $spacing-md;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color $transition-fast, transform $transition-fast;
+
+  &:hover {
+    background-color: darken(#4a90e2, 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.featuresList,
+.bugsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: $spacing-md;
+}
+
+.featureItem {
+  background-color: var(--color-background-primary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform $transition-fast;
+  border-left: 4px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &.completed {
+    border-left-color: var(--color-success);
+  }
+
+  &.inProgress {
+    border-left-color: var(--color-primary);
+  }
+
+  &.planned {
+    border-left-color: var(--color-text-tertiary);
+  }
+}
+
+.featureHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-sm;
+}
+
+.featureName {
+  font-size: $font-size-md;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.featureStatus {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.statusBadge {
+  font-size: $font-size-xs;
+  padding: 2px 6px;
+  border-radius: 10px;
+  text-transform: capitalize;
+  margin-bottom: 4px;
+
+  .completed & {
+    background-color: var(--color-success);
+    color: white;
+  }
+
+  .inProgress & {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  .planned & {
+    background-color: var(--color-text-tertiary);
+    color: var(--color-background-primary);
+  }
+}
+
+.complexity {
+  display: flex;
+  gap: 3px;
+}
+
+.complexityDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-background-secondary);
+
+  &.filled {
+    background-color: var(--color-warning);
+  }
+}
+
+.featureDescription {
+  margin: 0 0 $spacing-md 0;
+  font-size: $font-size-sm;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.progressContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.progressTrack {
+  flex: 1;
+  height: 6px;
+  background-color: var(--color-background-secondary);
+  border-radius: 3px;
+  margin-right: $spacing-sm;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 3px;
+
+  .completed & {
+    background-color: var(--color-success);
+  }
+}
+
+.progressValue {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+  font-family: $font-family-secondary;
+  min-width: 35px;
+  text-align: right;
+}
+
+.featureActions,
+.bugActions {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.actionButton {
+  flex: 1;
+  padding: $spacing-sm;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: background-color $transition-fast, color $transition-fast;
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+}
+
+// Bugs tab styles
+.bugItem {
+  background-color: var(--color-background-primary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform $transition-fast;
+  border-left: 4px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  &.critical {
+    border-left-color: var(--color-error);
+  }
+
+  &.high {
+    border-left-color: var(--color-warning);
+  }
+
+  &.medium {
+    border-left-color: var(--color-primary);
+  }
+
+  &.low {
+    border-left-color: var(--color-success);
+  }
+}
+
+.bugHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-sm;
+}
+
+.bugTitle {
+  font-size: $font-size-md;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.severityBadge {
+  font-size: $font-size-xs;
+  padding: 2px 6px;
+  border-radius: 10px;
+  text-transform: capitalize;
+
+  .critical & {
+    background-color: var(--color-error);
+    color: white;
+  }
+
+  .high & {
+    background-color: var(--color-warning);
+    color: white;
+  }
+
+  .medium & {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  .low & {
+    background-color: var(--color-success);
+    color: white;
+  }
+}
+
+.bugDetails {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $spacing-sm;
+}
+
+.bugDetail {
+  font-size: $font-size-xs;
+  color: var(--color-text-primary);
+}
+
+.detailLabel {
+  color: var(--color-text-secondary);
+  margin-right: $spacing-xs;
+}
+
+.bugDescription {
+  margin: 0 0 $spacing-md 0;
+  font-size: $font-size-sm;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+  flex: 1;
+}
+
+// Empty state
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-xl;
+  text-align: center;
+  color: var(--color-text-secondary);
+
+  p {
+    margin: 0;
+    font-size: $font-size-md;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-lg) {
+  .productHeader {
+    flex-direction: column;
+    align-items: flex-start;
+
+    .productInfo {
+      margin-bottom: $spacing-md;
+    }
+
+    .productStats {
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  .releaseDetails {
+    flex-direction: column;
+
+    .releaseFeatures {
+      margin-bottom: $spacing-md;
+    }
+
+    .releaseEstimate {
+      align-items: flex-start;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .featuresList,
+  .bugsList {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(var(--color-primary-rgb), 0.3);
+      border-radius: 2px;
+    }
+  }
+
+  .tab {
+    padding: $spacing-sm;
+  }
+
+  .featuresHeader,
+  .bugsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+
+    h3 {
+      margin-bottom: $spacing-sm;
+    }
+  }
+}

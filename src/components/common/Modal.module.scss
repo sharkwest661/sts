@@ -1,0 +1,144 @@
+// src/components/common/Modal.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: $z-index-modal;
+  padding: $spacing-md;
+}
+
+.modalContainer {
+  background-color: var(--color-background-primary);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  // Modal sizes
+  &.small {
+    max-width: 400px;
+  }
+
+  &.medium {
+    max-width: 600px;
+  }
+
+  &.large {
+    max-width: 800px;
+  }
+
+  &.fullscreen {
+    max-width: 95vw;
+    height: 95vh;
+  }
+}
+
+.modalHeader {
+  padding: $spacing-md;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h3 {
+    margin: 0;
+    font-size: $font-size-lg;
+    color: var(--color-text-primary);
+  }
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-text-tertiary);
+  font-size: $font-size-md;
+  transition: all $transition-fast;
+
+  &:hover {
+    background-color: var(--color-background-secondary);
+    color: var(--color-text-primary);
+  }
+}
+
+.modalContent {
+  padding: $spacing-md;
+  overflow-y: auto;
+  flex: 1;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-background-secondary);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--color-primary-rgb), 0.3);
+    border-radius: 3px;
+
+    &:hover {
+      background-color: rgba(var(--color-primary-rgb), 0.5);
+    }
+  }
+}
+
+.modalFooter {
+  padding: $spacing-md;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-md;
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-sm) {
+  .modalContainer {
+    &.small,
+    &.medium,
+    &.large {
+      max-width: 100%;
+    }
+  }
+
+  .modalOverlay {
+    padding: $spacing-xs;
+  }
+
+  .modalHeader {
+    padding: $spacing-sm;
+  }
+
+  .modalContent {
+    padding: $spacing-sm;
+  }
+
+  .modalFooter {
+    padding: $spacing-sm;
+    flex-direction: column;
+
+    // Make buttons full width on small screens
+    button {
+      width: 100%;
+    }
+  }
+}

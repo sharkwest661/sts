@@ -1,0 +1,517 @@
+// src/components/marketing/MarketingCampaigns.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.marketingCampaigns {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.marketingHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+
+  h2 {
+    font-size: $font-size-2xl;
+    margin: 0;
+    color: var(--color-text-primary);
+  }
+}
+
+.marketingBudget {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  .budgetLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+    margin-bottom: 2px;
+  }
+
+  .budgetInfo {
+    font-family: $font-family-secondary;
+    font-weight: 600;
+  }
+
+  .spentAmount {
+    color: var(--color-primary);
+  }
+
+  .budgetDivider {
+    margin: 0 $spacing-xs;
+    color: var(--color-text-tertiary);
+  }
+
+  .totalBudget {
+    color: var(--color-text-primary);
+  }
+}
+
+.marketingStats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  padding: $spacing-md;
+  background-color: var(--color-background-secondary);
+  border-radius: 8px;
+
+  .statIcon {
+    font-size: 24px;
+    margin-right: $spacing-md;
+  }
+
+  .statInfo {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .statLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+    margin-bottom: 2px;
+  }
+
+  .statValue {
+    font-size: $font-size-lg;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-family: $font-family-secondary;
+  }
+}
+
+.tabsContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: $spacing-md;
+}
+
+.tab {
+  padding: $spacing-sm $spacing-lg;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color $transition-fast, border-color $transition-fast;
+
+  &:hover {
+    color: var(--color-text-primary);
+  }
+
+  &.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+}
+
+.tabContent {
+  flex: 1;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--color-background-secondary);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--color-primary-rgb), 0.3);
+    border-radius: 4px;
+
+    &:hover {
+      background-color: rgba(var(--color-primary-rgb), 0.5);
+    }
+  }
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: $spacing-lg 0 $spacing-md;
+  padding-bottom: $spacing-xs;
+  border-bottom: 1px dashed var(--color-border);
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  h3 {
+    font-size: $font-size-lg;
+    margin: 0;
+    color: var(--color-text-primary);
+  }
+}
+
+.emptyState {
+  padding: $spacing-xl;
+  text-align: center;
+  color: var(--color-text-secondary);
+  background-color: var(--color-background-secondary);
+  border-radius: 8px;
+
+  p {
+    margin: 0;
+    font-size: $font-size-md;
+  }
+}
+
+.campaignsList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: $spacing-md;
+}
+
+.campaignCard {
+  background-color: var(--color-background-primary);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: $spacing-md;
+  transition: transform $transition-fast, box-shadow $transition-fast;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &.pastCampaign {
+    opacity: 0.8;
+  }
+}
+
+.campaignHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: $spacing-sm;
+}
+
+.campaignName {
+  font-size: $font-size-md;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.campaignType {
+  font-size: $font-size-xs;
+  color: white;
+  background-color: var(--color-primary);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.campaignDescription {
+  margin: 0 0 $spacing-md 0;
+  font-size: $font-size-sm;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.campaignStats,
+.campaignDetails {
+  display: flex;
+  margin-bottom: $spacing-md;
+}
+
+.statItem,
+.detailItem {
+  flex: 1;
+
+  .statLabel,
+  .detailLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+    margin-bottom: 2px;
+    display: block;
+  }
+
+  .statValue,
+  .detailValue {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-family: $font-family-secondary;
+  }
+}
+
+.campaignProgress {
+  margin-bottom: $spacing-md;
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.progressLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+}
+
+.progressValue {
+  font-size: $font-size-xs;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.progressBarContainer {
+  height: 6px;
+  background-color: var(--color-background-secondary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 3px;
+  transition: width $transition-normal;
+}
+
+.campaignEffectiveness {
+  margin-bottom: $spacing-md;
+}
+
+.effectivenessHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.effectivenessLabel {
+  font-size: $font-size-xs;
+  color: var(--color-text-secondary);
+}
+
+.effectivenessValue {
+  font-size: $font-size-xs;
+  font-weight: 600;
+
+  &.excellent {
+    color: var(--color-success);
+  }
+
+  &.good {
+    color: var(--color-primary);
+  }
+
+  &.fair {
+    color: var(--color-warning);
+  }
+
+  &.poor {
+    color: var(--color-error);
+  }
+}
+
+.effectivenessBarContainer {
+  height: 6px;
+  background-color: var(--color-background-secondary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.effectivenessBar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width $transition-normal;
+
+  &.excellent {
+    background-color: var(--color-success);
+  }
+
+  &.good {
+    background-color: var(--color-primary);
+  }
+
+  &.fair {
+    background-color: var(--color-warning);
+  }
+
+  &.poor {
+    background-color: var(--color-error);
+  }
+}
+
+.campaignResults,
+.campaignPotential {
+  display: flex;
+  margin-bottom: $spacing-md;
+  padding: $spacing-sm;
+  background-color: var(--color-background-secondary);
+  border-radius: 6px;
+}
+
+.resultItem,
+.potentialItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .resultLabel,
+  .potentialLabel {
+    font-size: $font-size-xs;
+    color: var(--color-text-secondary);
+    margin-bottom: 2px;
+  }
+
+  .resultValue,
+  .potentialValue {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-family: $font-family-secondary;
+  }
+}
+
+.campaignActions {
+  display: flex;
+  gap: $spacing-sm;
+}
+
+.actionButton {
+  flex: 1;
+  padding: $spacing-sm;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: background-color $transition-fast, color $transition-fast;
+
+  &:hover {
+    background-color: var(--color-primary);
+    color: white;
+  }
+
+  &:first-child:hover {
+    background-color: var(--color-accent);
+  }
+}
+
+.startButton {
+  width: 100%;
+  padding: $spacing-sm;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color $transition-fast, transform $transition-fast;
+
+  &:hover:not(.disabled) {
+    background-color: darken(#4a90e2, 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(.disabled) {
+    transform: translateY(1px);
+  }
+
+  &.disabled {
+    background-color: var(--color-text-tertiary);
+    cursor: not-allowed;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-lg) {
+  .marketingHeader {
+    flex-direction: column;
+    align-items: flex-start;
+
+    h2 {
+      margin-bottom: $spacing-sm;
+    }
+
+    .marketingBudget {
+      align-items: flex-start;
+    }
+  }
+
+  .marketingStats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .campaignsList {
+    grid-template-columns: 1fr;
+  }
+
+  .campaignStats,
+  .campaignDetails {
+    flex-direction: column;
+
+    .statItem,
+    .detailItem {
+      margin-bottom: $spacing-sm;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .marketingStats {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+
+    &::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(var(--color-primary-rgb), 0.3);
+      border-radius: 2px;
+    }
+  }
+
+  .tab {
+    padding: $spacing-sm;
+  }
+
+  .campaignResults,
+  .campaignPotential {
+    flex-direction: column;
+
+    .resultItem,
+    .potentialItem {
+      margin-bottom: $spacing-sm;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
