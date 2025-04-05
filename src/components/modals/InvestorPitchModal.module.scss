@@ -1,0 +1,388 @@
+// src/components/modals/InvestorPitchModal.module.scss
+@import "../../styles/abstracts/variables";
+@import "../../styles/abstracts/mixins";
+
+.investorPitchModal {
+  width: 100%;
+}
+
+.investorHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-md;
+}
+
+.investorName {
+  font-size: $font-size-xl;
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.investorType {
+  font-size: $font-size-xs;
+  font-weight: 600;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: 12px;
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.investorInterest {
+  margin-bottom: $spacing-md;
+}
+
+.interestHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.interestLabel {
+  font-size: $font-size-sm;
+  color: var(--color-text-secondary);
+}
+
+.interestValue {
+  font-size: $font-size-sm;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.interestBarContainer {
+  height: 8px;
+  background-color: var(--color-background-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.interestBar {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 4px;
+  transition: width $transition-normal;
+}
+
+.investorFocus {
+  margin-bottom: $spacing-md;
+
+  h4 {
+    font-size: $font-size-md;
+    margin: 0 0 $spacing-sm 0;
+    color: var(--color-text-primary);
+  }
+
+  .focusAreas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+  }
+
+  .focusTag {
+    font-size: $font-size-xs;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: 12px;
+    background-color: rgba(var(--color-primary-rgb), 0.1);
+    color: var(--color-primary);
+    text-transform: capitalize;
+  }
+}
+
+.companyStats {
+  margin-bottom: $spacing-md;
+  padding: $spacing-md;
+  background-color: var(--color-background-secondary);
+  border-radius: 8px;
+
+  h4 {
+    font-size: $font-size-md;
+    margin: 0 0 $spacing-sm 0;
+    color: var(--color-text-primary);
+  }
+
+  .statItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .statLabel {
+      font-size: $font-size-sm;
+      color: var(--color-text-secondary);
+    }
+
+    .statValue {
+      font-size: $font-size-md;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      font-family: $font-family-secondary;
+    }
+  }
+}
+
+.pitchInstructions {
+  margin-bottom: $spacing-lg;
+
+  p {
+    font-size: $font-size-sm;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+    margin: 0;
+  }
+}
+
+.pitchActions {
+  display: flex;
+  gap: $spacing-md;
+}
+
+.pitchButton {
+  flex: 1;
+  padding: $spacing-sm $spacing-md;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color $transition-fast, transform $transition-fast;
+
+  &:hover {
+    background-color: darken(#4a90e2, 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.cancelButton {
+  padding: $spacing-sm $spacing-md;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    background-color: var(--color-error);
+    color: white;
+  }
+}
+
+// Pitch result styles
+.pitchResult {
+  width: 100%;
+}
+
+.resultHeader {
+  padding: $spacing-md;
+  text-align: center;
+  margin-bottom: $spacing-md;
+  border-radius: 8px;
+
+  h3 {
+    margin: 0;
+    font-size: $font-size-xl;
+  }
+
+  &.excited {
+    background-color: rgba(var(--color-success-rgb), 0.1);
+
+    h3 {
+      color: var(--color-success);
+    }
+  }
+
+  &.interested {
+    background-color: rgba(var(--color-primary-rgb), 0.1);
+
+    h3 {
+      color: var(--color-primary);
+    }
+  }
+
+  &.skeptical {
+    background-color: rgba(var(--color-warning-rgb), 0.1);
+
+    h3 {
+      color: var(--color-warning);
+    }
+  }
+}
+
+.resultContent {
+  padding: $spacing-md;
+}
+
+.investorFeedback {
+  display: flex;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+
+  .investorImage {
+    font-size: 48px;
+    flex-shrink: 0;
+  }
+
+  .feedbackText {
+    p {
+      font-size: $font-size-md;
+      color: var(--color-text-primary);
+      line-height: 1.5;
+      margin: 0;
+    }
+  }
+}
+
+.offerSection {
+  background-color: var(--color-background-secondary);
+  border-radius: 8px;
+  padding: $spacing-md;
+  margin-bottom: $spacing-md;
+}
+
+.offerTitle {
+  font-size: $font-size-lg;
+  margin: 0 0 $spacing-md 0;
+  color: var(--color-text-primary);
+  text-align: center;
+}
+
+.offerDetails {
+  margin-bottom: $spacing-md;
+}
+
+.offerItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $spacing-sm;
+
+  .offerLabel {
+    font-size: $font-size-sm;
+    color: var(--color-text-secondary);
+  }
+
+  .offerValue {
+    font-size: $font-size-md;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    font-family: $font-family-secondary;
+  }
+}
+
+.offerExpectations {
+  margin-top: $spacing-md;
+
+  .expectationsLabel {
+    font-size: $font-size-sm;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    display: block;
+    margin-bottom: $spacing-xs;
+  }
+
+  .expectationsText {
+    font-size: $font-size-sm;
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+}
+
+.offerActions {
+  display: flex;
+  gap: $spacing-md;
+  margin-top: $spacing-md;
+}
+
+.acceptButton {
+  flex: 1;
+  padding: $spacing-sm $spacing-md;
+  background-color: var(--color-success);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color $transition-fast, transform $transition-fast;
+
+  &:hover {
+    background-color: darken(#7ed321, 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.rejectButton {
+  flex: 1;
+  padding: $spacing-sm $spacing-md;
+  background-color: var(--color-background-primary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    background-color: var(--color-error);
+    color: white;
+    border-color: var(--color-error);
+  }
+}
+
+.noOfferSection {
+  text-align: center;
+
+  .noOfferMessage {
+    font-size: $font-size-md;
+    color: var(--color-text-primary);
+    line-height: 1.5;
+    margin: 0 0 $spacing-lg 0;
+  }
+
+  .closeButton {
+    padding: $spacing-sm $spacing-lg;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: $font-size-md;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color $transition-fast, transform $transition-fast;
+
+    &:hover {
+      background-color: darken(#4a90e2, 10%);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: $breakpoint-md) {
+  .pitchActions,
+  .offerActions {
+    flex-direction: column;
+  }
+
+  .investorFeedback {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
