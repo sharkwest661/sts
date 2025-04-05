@@ -1,0 +1,49 @@
+// src/styles/themes/_dark.scss
+
+// Dark theme overrides the default light theme
+
+body.dark-theme {
+  // Dark mode color palette
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #d0d0d0;
+  --color-text-tertiary: #a0a0a0;
+  --color-background-primary: #1a1a1a;
+  --color-background-secondary: #2a2a2a;
+  --color-border: #444444;
+
+  // Keep brand colors the same, but could adjust if needed
+  // --color-primary: #{$color-primary};
+  // --color-secondary: #{$color-secondary};
+  // --color-accent: #{$color-accent};
+
+  // Status colors with slight adjustments for dark mode
+  --color-error: #ff6b6b;
+  --color-success: #51cf66;
+  --color-warning: #fcc419;
+
+  // Game specific theming for dark mode
+  --color-office-bg: #252525;
+
+  // Component specific
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+// Dark mode specific adjustments for cards, inputs, etc.
+body.dark-theme {
+  .card {
+    background-color: #252525;
+  }
+
+  // Custom scrollbar colors for dark mode
+  ::-webkit-scrollbar-track {
+    background: #333333;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #555555;
+
+    &:hover {
+      background-color: #777777;
+    }
+  }
+}

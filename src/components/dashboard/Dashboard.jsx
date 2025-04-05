@@ -1,9 +1,21 @@
 // src/components/dashboard/Dashboard.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { shallow } from "zustand/shallow";
 import styles from "./Dashboard.module.scss";
-import useGameStore from "../../store/gameStore";
+import { useGameStore } from "../../store";
 import useTeamStore from "../../store/teamStore";
+
+// Import Lucide icons
+import {
+  Clock,
+  TrendingUp,
+  Users,
+  Code,
+  DollarSign,
+  Bell,
+  CheckSquare,
+} from "lucide-react";
 
 // Dashboard widgets
 import MetricsWidget from "./widgets/MetricsWidget";
@@ -17,49 +29,126 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [timeOfDay, setTimeOfDay] = useState("morning");
 
-  // Get game state
-  const companyName = useGameStore((state) => state.companyName);
-  const companyValuation = useGameStore((state) => state.companyValuation);
-  const cash = useGameStore((state) => state.cash);
-  const revenue = useGameStore((state) => state.revenue);
-  const expenses = useGameStore((state) => state.expenses);
-  const startupIdea = useGameStore((state) => state.startupIdea);
-  const gameTick = useGameStore((state) => state.gameTick);
-  const reputation = useGameStore((state) => state.reputation);
+  // Get game state - use proper selector pattern
+  const gameState = useGameStore(
+    (state) => ({
+      companyName: state.companyName,
+      companyValuation: state.companyValuation,
+      cash: state.cash,
+      revenue: state.revenue,
+      expenses: state.expenses,
+      startupIdea: state.startupIdea,
+      reputation: state.reputation,
+      gameTime: state.gameTime,
+    }),
+    shallow
+  );
 
-  // Get team stats
-  const teamStats = useTeamStore((state) => state.getTeamStats());
+  // FIXED: Don't use method calls in selectors, get raw data instead
   const teamMembers = useTeamStore((state) => state.teamMembers);
 
-  // Set time of day based on game tick
-  useEffect(() => {
-    const gameHours = Math.floor((gameTick / 60) % 24);
+  // FIXED: Calculate team stats locally instead of calling the method
+  const teamStats = useMemo(() => {
+    if (!teamMembers || teamMembers.length === 0) {
+      return {
+        coding: 0,
+        design: 0,
+        marketing: 0,
+        business: 0,
+        totalSalary: 0,
+        headcount: 0,
+        averageMorale: 0,
+        averageEnergy: 0,
+      };
+    }
 
-    if (gameHours >= 5 && gameHours < 12) {
+    // Calculate team stats from team members
+    return teamMembers.reduce(
+      (stats, member) => {
+        // Factor in morale and energy to productivity
+        const productivityMultiplier =
+          (member.morale / 100) * (member.energy / 100);
+
+        return {
+          coding:
+            stats.coding +
+            (member.skills?.coding || 0) * productivityMultiplier,
+          design:
+            stats.design +
+            (member.skills?.design || 0) * productivityMultiplier,
+          marketing:
+            stats.marketing +
+            (member.skills?.marketing || 0) * productivityMultiplier,
+          business:
+            stats.business +
+            (member.skills?.business || 0) * productivityMultiplier,
+          totalSalary: stats.totalSalary + (member.salary || 0),
+          headcount: stats.headcount + 1,
+          averageMorale:
+            (stats.averageMorale * stats.headcount + member.morale) /
+            (stats.headcount + 1),
+          averageEnergy:
+            (stats.averageEnergy * stats.headcount + member.energy) /
+            (stats.headcount + 1),
+        };
+      },
+      {
+        coding: 0,
+        design: 0,
+        marketing: 0,
+        business: 0,
+        totalSalary: 0,
+        headcount: 0,
+        averageMorale: 0,
+        averageEnergy: 0,
+      }
+    );
+  }, [teamMembers]);
+
+  // Set time of day based on game time
+  useEffect(() => {
+    if (!gameState.gameTime) return;
+
+    const { hour } = gameState.gameTime;
+
+    if (hour >= 5 && hour < 12) {
       setTimeOfDay("morning");
-    } else if (gameHours >= 12 && gameHours < 18) {
+    } else if (hour >= 12 && hour < 18) {
       setTimeOfDay("afternoon");
     } else {
       setTimeOfDay("evening");
     }
-  }, [gameTick]);
+  }, [gameState.gameTime]);
 
   // Format large numbers with commas
   const formatNumber = (num) => {
     return num.toLocaleString("en-US", { maximumFractionDigits: 0 });
   };
 
-  // Calculate monthly profit/loss
-  const monthlyProfitLoss = revenue - expenses;
+  // Calculate metrics using useMemo to prevent recalculations
+  const metrics = useMemo(() => {
+    // Calculate monthly profit/loss
+    const monthlyProfitLoss = gameState.revenue - gameState.expenses;
 
-  // Calculate metrics for display
-  const burnRate = expenses > 0 ? (cash / expenses).toFixed(1) : "∞";
-  const monthsLabel =
-    burnRate === "∞"
-      ? "months"
-      : monthlyProfitLoss >= 0
-      ? "profit/mo"
-      : "until broke";
+    // Calculate burn rate
+    const burnRate =
+      gameState.expenses > 0
+        ? (gameState.cash / gameState.expenses).toFixed(1)
+        : "∞";
+
+    const monthsLabel =
+      burnRate === "∞"
+        ? "months"
+        : monthlyProfitLoss >= 0
+        ? "profit/mo"
+        : "until broke";
+
+    return {
+      monthlyProfitLoss,
+      burnRate,
+      monthsLabel,
+    };
+  }, [gameState.revenue, gameState.expenses, gameState.cash]);
 
   // Mock data for widgets that would normally come from their respective stores
   const productStatus = {
@@ -114,27 +203,29 @@ const Dashboard = () => {
           <h1>Good {timeOfDay}, CEO</h1>
           <p className={styles.headerTagline}>
             Here's the current status of{" "}
-            <span className={styles.companyHighlight}>{companyName}</span>
+            <span className={styles.companyHighlight}>
+              {gameState.companyName}
+            </span>
           </p>
         </div>
 
         <div className={styles.valuationDisplay}>
           <span className={styles.valuationLabel}>Company Valuation</span>
           <span className={styles.valuationAmount}>
-            ${formatNumber(companyValuation)}
+            ${formatNumber(gameState.companyValuation)}
           </span>
         </div>
       </header>
 
       <div className={styles.dashboardGrid}>
         <MetricsWidget
-          cash={cash}
-          revenue={revenue}
-          expenses={expenses}
-          burnRate={burnRate}
-          monthlyProfitLoss={monthlyProfitLoss}
-          monthsLabel={monthsLabel}
-          reputation={reputation}
+          cash={gameState.cash}
+          revenue={gameState.revenue}
+          expenses={gameState.expenses}
+          burnRate={metrics.burnRate}
+          monthlyProfitLoss={metrics.monthlyProfitLoss}
+          monthsLabel={metrics.monthsLabel}
+          reputation={gameState.reputation}
         />
 
         <TeamOverviewWidget
@@ -144,15 +235,15 @@ const Dashboard = () => {
         />
 
         <ProductStatusWidget
-          productName={startupIdea?.name || "Your Product"}
+          productName={gameState.startupIdea?.name || "Your Product"}
           productStatus={productStatus}
           onViewProduct={() => navigate("/product")}
         />
 
         <FinancialWidget
-          cash={cash}
-          revenue={revenue}
-          expenses={expenses}
+          cash={gameState.cash}
+          revenue={gameState.revenue}
+          expenses={gameState.expenses}
           onViewInvestors={() => navigate("/investors")}
         />
 
